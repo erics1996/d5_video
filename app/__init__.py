@@ -1,11 +1,16 @@
 from flask import Flask
-from app.admin import admin as admin_blueprint
-from app.home import home as home_blueprint
+
 from flask_session import Session
-from flask_sqlalchemy import SQLAlchemy
 
 # db.Model就是declarative_base
+from flask_sqlalchemy import SQLAlchemy
+
 db = SQLAlchemy()
+# 蓝图要放到实例化SQLAlchemy的下面，因为蓝图里面要用到db
+from app.admin import admin as admin_blueprint
+from app.home import home as home_blueprint
+
+from .models import *
 
 
 def create_app():
