@@ -3,8 +3,5 @@ from flask import render_template
 
 
 @home.route('/')
-def user_info_list():
-    return ''
-
-
-
+def index():
+    return render_template('home/index.html')

@@ -1,5 +1,10 @@
 from app.home import home
-from flask import render_template
+from flask import render_template, flash, request
+from ..forms.user_form import RegisterForm
+from ...models import User
+from app import db
+from werkzeug.security import generate_password_hash
+import uuid
 
 
 @home.route("/login/", methods=['GET', 'POST'])
@@ -15,7 +20,23 @@ def logout():
 # 会员注册
 @home.route("/register/", methods=['GET', 'POST'])
 def register():
-    return ''
+    form = RegisterForm()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            data = form.data
+            user = User(
+                name=data["name"],
+                email=data["email"],
+                phone=data["phone"],
+                pwd=generate_password_hash(data["pwd"]),
+                uuid=uuid.uuid4().hex
+            )
+            print(user)
+            db.session.add(user)
+            db.session.commit()
+            db.session.remove()
+            flash("注册成功！", "ok")
+    return render_template('home/register.html', form=form)
 
 
 # 修改会员资料
