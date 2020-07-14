@@ -19,6 +19,10 @@ class User(db.Model):
     comments = db.relationship('Comment', backref='user')  # 评论外键关系关联
     movie_cols = db.relationship('Moviecol', backref='user')  # 评论外键关系关联
 
+    def check_pwd(self, pwd):
+        from werkzeug.security import check_password_hash
+        return check_password_hash(self.pwd, pwd)  # 如果是True代表验证成功
+
 
 class UserLog(db.Model):
     __tablename__ = "user_log"

@@ -5,6 +5,7 @@ from ...models import User
 
 
 class RegisterForm(FlaskForm):
+    """注册表单"""
     name = StringField(
         label="账号",
         validators=[
@@ -88,3 +89,35 @@ class RegisterForm(FlaskForm):
         user = User.query.filter_by(email=email).count()
         if user >= 1:
             raise ValidationError('该邮箱已被注册！')
+
+
+class LoginForm(FlaskForm):
+    '''登录表单'''
+    name = StringField(
+        label="账号",
+        validators=[
+            DataRequired("请输入账号！")
+        ],
+        description="账号",
+        render_kw={
+            "class": "form-control input",
+            "placeholder": "请输入账号！",
+        }
+    )
+    pwd = PasswordField(
+        label="密码",
+        validators=[
+            DataRequired("请输入密码！")
+        ],
+        description="密码",
+        render_kw={
+            "class": "form-control",
+            "placeholder": "请输入密码！"
+        }
+    )
+    submit = SubmitField(
+        '登陆',
+        render_kw={
+            "class": "btn btn-log btn-primary btn-block"
+        }
+    )
