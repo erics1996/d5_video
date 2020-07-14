@@ -1,19 +1,33 @@
 from .. import admin
-from app import db,models
+from app import db, models
+from flask import render_template
 
-@admin.route('/admin/')
-def index():
-    """
-    添加数据，如果没有连接db.session(create_scoped_session)内部会自动创建连接
-    """
-    db.session.add(models.Auth(name='',url=''))
-    db.session.commit()
-    # 释放连接
-    db.session.remove()
-    """
-    查询数据
-    """
-    ret = db.session.query(models.Auth).all()
-    print(ret)
-    db.session.remove()
-    return 'index'
+
+# 登录
+@admin.route("/admin/login/", methods=["GET", "POST"])
+def login():
+    return ''
+
+
+# 退出登录
+@admin.route("/admin/logout/")
+def logout():
+    return ""
+
+
+# 修改密码
+@admin.route("/admin/pwd/", methods=["GET", "POST"])
+def pwd():
+    return ''
+
+
+# 添加管理员
+@admin.route("/admin/add/", methods=["GET", "POST"])
+def admin_add():
+    return ''
+
+
+# 管理员列表
+@admin.route("/admin/list/<int:page>", methods=["GET"])
+def admin_list(page=None):
+    return ''
