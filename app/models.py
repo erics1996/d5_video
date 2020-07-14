@@ -2,6 +2,7 @@ from app import db
 from datetime import datetime
 
 
+# db.Model=make_declarative_base
 class Auth(db.Model):
     __tablename__ = "auth"
     __table_args__ = {'extend_existing': True}
