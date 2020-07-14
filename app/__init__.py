@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_session import Session
-# db.Model就是declarative_base
+
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
