@@ -11,6 +11,8 @@ class BaseConfig(object):
     # Redis配置
     SESSION_TYPE = 'redis'
     SESSION_REDIS = redis.Redis(host='127.0.0.1', port=6379, password='foobared')
+    import datetime
+    PERMANENT_SESSION_LIFETIME = datetime.timedelta(minutes=5)
 
 
 class ProductionConfig(BaseConfig):
