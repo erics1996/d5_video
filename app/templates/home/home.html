@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static',filename='home/css/bootstrap-movie.css') }}">
-    <!--    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.0/animate.min.css">-->
+    <!--        <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.0/animate.min.css">-->
     {% block css %}{% endblock %}
     <style>
         .navbar-brand > img {
@@ -60,37 +60,23 @@
                 <!--class="glyphicon glyphicon-log-in"></span>&nbsp;登录</a>-->
                 <!--</li>-->
                 {% if "user" in session %}
-                {#
-                <li>#}
-                    {# <a class="curlink" href=""><span#}
-                        {# class="glyphicon glyphicon-log-in"></span>&nbsp;已登录</a>#}
-                    {#
-                </li>
-                #}
                 <li>
                     <a class="curlink" href="{{ url_for('home.logout') }}"><span
                             class="glyphicon glyphicon-log-out"></span>&nbsp;退出</a>
                 </li>
-
-                {% else %}
-                <li>
-                    <a class="curlink" href="{{ url_for('home.login') }}"><span
-                            class="glyphicon glyphicon-log-in"></span>&nbsp;登录</a>
-                </li>
-
-
-                <li>
-                    <a class="curlink" href="{{ url_for('home.register') }}"><span
-                            class="glyphicon glyphicon-plus"></span>&nbsp;注册</a>
-                </li>
-                {% endif %}
-
-                {% if "user" in session %}
                 <li>
                     <a class="curlink" href="{{ url_for('home.user') }}"><span
                             class="glyphicon glyphicon-user"></span>&nbsp;{{ session["user"] }}</a>
                 </li>
                 {% else %}
+                <li>
+                    <a class="curlink" href="{{ url_for('home.login') }}"><span
+                            class="glyphicon glyphicon-log-in"></span>&nbsp;登录</a>
+                </li>
+                <li>
+                    <a class="curlink" href="{{ url_for('home.register') }}"><span
+                            class="glyphicon glyphicon-plus"></span>&nbsp;注册</a>
+                </li>
                 <li>
                     <a class="curlink" href="{{ url_for('home.user') }}"><span
                             class="glyphicon glyphicon-user"></span>&nbsp;会员中心</a>
@@ -108,12 +94,12 @@
 </div>
 <!--内容-->
 <!--底部-->
-<footer>
+<footer style="margin-top: 10px">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
                 <p>
-                    Copyright © 2018-2020 www.nxl123.cn 鲁ICP备13014270号-1
+                    Copyright © 2020-2022 www.erics1996.cn 沪ICP备13014270号
                 </p>
             </div>
         </div>
@@ -125,7 +111,7 @@
         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
         crossorigin="anonymous"></script>
 <!--<script src="{{ url_for('static',filename='base/js/jquery.singlePageNav.min.js') }}"></script>-->
-<!--<script src="{{ url_for('static',filename='base/js/wow.min.js') }}"></script>-->
+<script src="https://cdn.bootcdn.net/ajax/libs/wow/1.1.2/wow.min.js"></script>
 <!--<script src="{{ url_for('static',filename='lazyload/jquery.lazyload.min.js') }}"></script>-->
 <script src="https://cdn.bootcss.com/holder/2.9.4/holder.min.js"></script>
 <script>

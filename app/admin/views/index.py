@@ -1,6 +1,6 @@
 from .. import admin
 
 
-@admin.route('/')
+@admin.route('/admin/')
 def index():
     return 'index'
