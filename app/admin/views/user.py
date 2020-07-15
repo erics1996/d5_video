@@ -9,5 +9,11 @@ def user_list(page=None):
 
 # 查看会员信息
 @admin.route("/admin/users/view/<int:id>", methods=["GET"])
-def user_view():
+def user_view(id):
+    return ''
+
+
+# 查看会员登录日志列表
+@admin.route("/admin/users/view/<int:page>", methods=["GET"])
+def user_loginlog_list(page):
     return ''

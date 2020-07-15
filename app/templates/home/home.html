@@ -11,13 +11,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
           integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static',filename='home/css/bootstrap-movie.css') }}">
-    <!--        <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.0/animate.min.css">-->
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/animate.css/4.1.0/animate.min.css">
     {% block css %}{% endblock %}
     <style>
         .navbar-brand > img {
             display: inline;
         }
-
         .media {
             padding: 3px;
             border: 1px solid #ccc
@@ -36,7 +35,7 @@
                 <span class="icon-bar"></span>
             </button>
             <a href="{{ url_for('home.index',page=1) }}" class="navbar-brand" style="width:250px;">
-                <img src="{{ url_for('static',filename='public/imgs/logo.png') }}" style="height:30px;">&nbsp;D5影视网
+                <img class="wow animate__animated animate__flip" src="{{ url_for('static',filename='public/imgs/logo.png') }}" style="height:30px;" >&nbsp;D5影视网
             </a>
         </div>
         <!--小屏幕导航按钮和logo-->
@@ -71,8 +70,9 @@
                 <li>
                     <a href="{{url_for('home.user')}}">
                         <i class="avatar size-L radius">
-                            <img alt="头像" src="{{url_for('static',filename='home/uploads/users/'+session.get('face'))}}" class=""
-                                  height="35px" width="35px">
+                            <img alt="头像" src="{{url_for('static',filename='home/uploads/users/'+session.get('face'))}}"
+                                 class=""
+                                 height="30px" width="30px">
                         </i>
                     </a>
                 </li>
@@ -124,6 +124,7 @@
 <script src="https://cdn.bootcss.com/holder/2.9.4/holder.min.js"></script>
 <script>
     $(document).ready(function () {
+        new WOW().init();
         $("#do_search").click(function () {
                 var key = $("#key_movie").val();
                 location.href = "{{url_for('home.search',page=1)}}?key=" + key;

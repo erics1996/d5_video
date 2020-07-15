@@ -33,7 +33,7 @@ def register():
             db.session.commit()
             db.session.remove()
             flash("注册成功，开始登录吧！", "ok")
-            return redirect(url_for('home.login'))
+            return redirect(url_for('home.login', next=request.url))
     return render_template('home/register.html', form=form)
 
 
@@ -47,7 +47,7 @@ def login():
             user = User.query.filter_by(name=data["name"]).first()
             if not user or not user.check_pwd(data["pwd"]):
                 flash("账号或密码错误！", "err")
-                return redirect(url_for("home.login"))
+                return redirect(url_for("home.login", next=request.url))
             session["user"] = user.name
             session["user_id"] = user.id
             session['face'] = user.face
@@ -67,7 +67,7 @@ def logout():
     if session.get('user') and session.get('user_id'):
         session.pop('user', None)
         session.pop('user_id', None)
-    return redirect(url_for('home.login'))
+    return redirect(url_for('home.login', next=request.url))
 
 
 def user_login_decorator(func):
@@ -134,6 +134,11 @@ def user():
 @home.route("/pwd/", methods=["GET", "POST"])
 def pwd():
     form = PwdForm()
+    if form.validate_on_submit():
+        data = form.data
+        if data['old_pwd'] == data['new_pwd']:
+            flash('新旧密码相同，系统不做修改！', 'err')
+            return redirect(url_for('home.pwd'))
     return render_template('home/pwd.html', form=form)
 
 
@@ -144,6 +149,16 @@ def comment_list(page=None):
 
 
 # 登陆日志
-@home.route("/loginlog/<int:page>", methods=["GET"])
+@home.route("/loginlog/<int:page>/", methods=["GET"])
 def loginlog(page=None):
-    return render_template('home/loginlog.html')
+    if not page:
+        page = 1
+    # UserLog.query.filter_by(user_id=session.get('user_id'))：sql语句
+    # UserLog.query.filter_by(user_id=session.get('user_id')).first()：<UserLog 1>
+    # filter_by和order_by部分先后顺序
+    page_data = UserLog.query.order_by(
+        UserLog.add_time.desc()
+    ).filter_by(
+        user_id=session.get('user_id')
+    ).paginate(page=page, per_page=10)
+    return render_template('home/loginlog.html', page_data=page_data)

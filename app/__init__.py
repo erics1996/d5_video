@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_session import Session
 
 from flask_sqlalchemy import SQLAlchemy
@@ -17,6 +17,7 @@ def create_app():
     db.init_app(app)  # init_app方法源码可以查看已有的配置
     return app
 
+
 """
 必须在app对象创建完成后才可以导入蓝图，否则在蓝图中使用app对象需要导入app对象时循环导入
 """
@@ -26,3 +27,8 @@ from app.home import home as home_blueprint
 
 app.register_blueprint(admin_blueprint)
 app.register_blueprint(home_blueprint)
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('404.html'), 404
