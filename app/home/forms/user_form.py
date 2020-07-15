@@ -176,7 +176,7 @@ class UserDetailForm(FlaskForm):
     face = FileField(
         label='头像',
         validators=[
-            DataRequired("请上传头像！")
+            # DataRequired("请上传头像！")
         ],
         description="头像"
     )

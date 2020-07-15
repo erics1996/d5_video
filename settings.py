@@ -13,6 +13,8 @@ class BaseConfig(object):
     SESSION_REDIS = redis.Redis(host='127.0.0.1', port=6379, password='foobared')
     import datetime
     PERMANENT_SESSION_LIFETIME = datetime.timedelta(minutes=30)
+    import os
+    FACE_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)), "static/home/uploads/users/")
 
 
 class ProductionConfig(BaseConfig):

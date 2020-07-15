@@ -16,7 +16,7 @@
             {% for msg in get_flashed_messages(category_filter=["ok"]) %}
             <p style="color:green">{{msg}}</p>
             {% endfor %}
-            <form role="form" method="post" enctype="multipart/form-data">
+            <form role="form" method="post" enctype="multipart/form-data" novalidate>
                 <fieldset>
                     <div class="form-group">
                         <label for="input_name"><span class="glyphicon glyphicon-user"></span>&nbsp;{{form.name.label}}</label>
@@ -63,7 +63,7 @@
                         {{form.face}}
                         <br>
                         {% for err in form.face.errors %}
-                        <p style="color:red">{{ err }}</p>
+                        <p style="color:red;font-weight: bold">{{ err }}</p>
                         {% endfor %}
                         {% if user.face %}
                         <img src="{{url_for('static',filename='home/uploads/users/'+user.face)}}"
@@ -77,20 +77,16 @@
                         </label>
                         <!--<textarea class="form-control" rows="10" id="input_info">十年窗下无人问，一举成名天下知</textarea>-->
                         {{form.info}}
+                        {% for err in form.info.errors %}
+                        <p style="color:red;font-weight: bold">{{ err }}</p>
+                        {% endfor %}
                     </div>
-                    <!--<div class="col-md-12" id="error_info"></div>-->
-                    {% for err in form.info.errors %}
-                    <div class="col-md-12">
-                        <font style="color:red">{{ err }}</font>
-                    </div>
-                    {% endfor %}
                     {{form.csrf_token}}
                     {{form.submit}}
+                </fieldset>
+            </form>
         </div>
-        </fieldset>
-        </form>
     </div>
-</div>
 </div>
 {% endblock %}
 
