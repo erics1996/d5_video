@@ -1,6 +1,6 @@
 from flask import Blueprint
 
-admin = Blueprint('admin', __name__)
+admin = Blueprint('admin', __name__, url_prefix='/admin')
 import app.admin.views.admin
 import app.admin.views.index
 import app.admin.views.tag

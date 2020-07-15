@@ -16,7 +16,7 @@ def auth_add():
         db.session.commit()
         db.session.remove()
         flash("权限添加成功！", "ok")
-        return redirect(url_for('auth_add'))
+        return redirect(url_for('home.auth_add'))
     return render_template('admin/auth_add.html', form=form)
 
 

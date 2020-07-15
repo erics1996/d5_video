@@ -1,6 +1,6 @@
-from app import db, create_app
+from app import db
+from app import app  # from manage import app
 
-app = create_app()  # from manage import app
 app_ctx = app.app_context()  # AppContext对象里面有app和g
 """
 1.去指定的请求上下文中找app,再去app中找配置文件和Models
