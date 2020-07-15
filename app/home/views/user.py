@@ -9,10 +9,9 @@ from functools import wraps
 from werkzeug.utils import secure_filename
 import os
 from ...utils.alter_filename import change_filename
-# from app import create_app
-# app = create_app()
-
 from app import app
+
+
 # 会员注册
 @home.route("/register/", methods=['GET', 'POST'])
 def register():
@@ -27,7 +26,7 @@ def register():
                 phone=data["phone"],
                 pwd=generate_password_hash(data["pwd"]),
                 uuid=uuid.uuid4().hex,
-                face='9825bc315c6034a86bd349b813468252092376b6.jpeg',
+                face='default.jpeg',
             )
             # print(users)  # <User (transient 140110428913776)>
             db.session.add(user)
@@ -96,27 +95,27 @@ def user():
         form.info.data = user.info
     if form.validate_on_submit():
         data = form.data
-        # 上传了头像会才会更新头像，没有上传不操作
+        # 上传了头像会才会更新头像，没有上传不操作。图片支持中文名称
         if data['face']:
-            # 获取文件名
-            file_face = secure_filename(data['logo'].filename)  # form.face.data <=> data['logo']
-            user.face = change_filename(file_face)
             if not os.path.exists(app.config["FACE_DIR"]):
                 os.makedirs(app.config["FACE_DIR"])
-                os.chmod(app.config["FACE_DIR"], "rw")
-            data['logo'].save(app.config["FACE_DIR"] + user.face)
-        name_count = User.query.filter_by(nickname=data["nickname"]).count()
-        # if name_count == 1 and data["name"] != user.name:
-        #     flash("昵称已经存在！", "ok")
-        #     return redirect(url_for("home.user"))
-        # email_count = User.query.filter_by(email=data["email"]).count()
-        # if email_count == 1 and data["email"] != user.email:
-        #     flash("邮箱已经存在！", "ok")
-        #     return redirect(url_for("home.user"))
-        # phone_count = User.query.filter_by(phone=data["phone"]).count()
-        # if phone_count == 1 and data["phone"] != user.phone:
-        #     flash("手机号码已经存在！", "ok")
-        #     return redirect(url_for("home.user"))
+            file_face = secure_filename(data['face'].filename)  # form.face.data <=> data['face']
+            user.face = change_filename(file_face)  # 20200715164138eb5b145ddee1494a8c5d00dd1bb617c4.jpeg
+            data['face'].save(app.config["FACE_DIR"] + user.face)
+            if os.path.exists(app.config['FACE_DIR'] + session['face']):
+                os.remove(app.config['FACE_DIR'] + session['face'])
+        nickname_count = User.query.filter_by(nickname=data["nickname"]).count()
+        if nickname_count == 1 and data["nickname"] != user.nickname:
+            flash("昵称已存在！", "err")
+            return redirect(url_for("home.user"))
+        email_count = User.query.filter_by(email=data["email"]).count()
+        if email_count == 1 and data["email"] != user.email:
+            flash("邮箱已存在！", "err")
+            return redirect(url_for("home.user"))
+        phone_count = User.query.filter_by(phone=data["phone"]).count()
+        if phone_count == 1 and data["phone"] != user.phone:
+            flash("手机号码已存在！", "err")
+            return redirect(url_for("home.user"))
         user.nickname = data["nickname"]
         user.email = data["email"]
         user.phone = data["phone"]
@@ -124,7 +123,9 @@ def user():
         db.session.add(user)
         db.session.commit()
         db.session.remove()
-        flash("已更新", "ok")
+        user = User.query.get(int(session["user_id"]))
+        session['face'] = user.face
+        flash("保存成功！", "ok")
         return redirect(url_for("home.user"))
     return render_template("home/user.html", form=form, user=user)
 

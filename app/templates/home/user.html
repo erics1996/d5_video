@@ -5,17 +5,24 @@
 {% block content %}
 {% include "home/menu.html" %}
 <div class="col-md-9">
+    {% for msg in get_flashed_messages(category_filter=["ok"]) %}
+    <div class="alert alert-success alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <strong>{{msg}}</strong>
+    </div>
+    {% endfor %}
+    {% for msg in get_flashed_messages(category_filter=["err"]) %}
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
+        <strong>{{msg}}</strong>
+    </div>
+    {% endfor %}
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title"><span class="glyphicon glyphicon-map-marker"></span>&nbsp;会员信息</h3>
         </div>
         <div class="panel-body">
-            {% for msg in get_flashed_messages(category_filter=["err"]) %}
-            <p style="color:red">{{msg}}</p>
-            {% endfor %}
-            {% for msg in get_flashed_messages(category_filter=["ok"]) %}
-            <p style="color:green">{{msg}}</p>
-            {% endfor %}
             <form role="form" method="post" enctype="multipart/form-data" novalidate>
                 <fieldset>
                     <div class="form-group">
@@ -33,7 +40,7 @@
                         <!--value="jinlong">-->
                         {{form.nickname}}
                         {% for err in form.nickname.errors %}
-                        <p style="color:red">{{ err }}</p>
+                        <p style="color:red;font-weight: bold">{{ err }}</p>
                         {% endfor %}
                     </div>
                     <div class="form-group">

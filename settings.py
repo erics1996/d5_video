@@ -14,7 +14,8 @@ class BaseConfig(object):
     import datetime
     PERMANENT_SESSION_LIFETIME = datetime.timedelta(minutes=30)
     import os
-    FACE_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)), "static/home/uploads/users/")
+    FACE_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)), "app/static/home/uploads/users/")
+    # print(os.path.abspath(os.path.dirname(__file__)))#/media/thanlon/存储盘/项目实施/开发/Flask/d5_video
 
 
 class ProductionConfig(BaseConfig):
