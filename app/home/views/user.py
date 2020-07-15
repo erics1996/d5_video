@@ -149,6 +149,16 @@ def comment_list(page=None):
 
 
 # 登陆日志
-@home.route("/loginlog/<int:page>", methods=["GET"])
+@home.route("/loginlog/<int:page>/", methods=["GET"])
 def loginlog(page=None):
-    return render_template('home/loginlog.html')
+    if not page:
+        page = 1
+    # UserLog.query.filter_by(user_id=session.get('user_id'))：sql语句
+    # UserLog.query.filter_by(user_id=session.get('user_id')).first()：<UserLog 1>
+    # filter_by和order_by部分先后顺序
+    page_data = UserLog.query.order_by(
+        UserLog.add_time.desc()
+    ).filter_by(
+        user_id=session.get('user_id')
+    ).paginate(page=page, per_page=10)
+    return render_template('home/loginlog.html', page_data=page_data)
