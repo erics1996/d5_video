@@ -1,6 +1,7 @@
 from .. import admin
 from app import db, models
 from flask import render_template
+from ..forms.admin_form import AdminForm
 
 
 # 登录
@@ -24,7 +25,8 @@ def pwd():
 # 添加管理员
 @admin.route("/admin/add/", methods=["GET", "POST"])
 def admin_add():
-    return ''
+    form = AdminForm()
+    return render_template('admin/admin_add.html', form=form)
 
 
 # 管理员列表
