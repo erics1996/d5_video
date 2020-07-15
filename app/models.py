@@ -7,17 +7,22 @@ class User(db.Model):
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True)
+    nickname = db.Column(db.String(100), unique=True)
     pwd = db.Column(db.String(100))
     email = db.Column(db.String(100), unique=True)
     phone = db.Column(db.String(11), unique=True)
     info = db.Column(db.Text)  # 个性简介
-    face = db.Column(db.String(255), unique=True)  # 头像
+    face = db.Column(db.String(255))  # 头像
     add_time = db.Column(db.DateTime, index=True, default=datetime.now)
     uuid = db.Column(db.String(255), unique=True)  # 唯一标识符
 
     user_logs = db.relationship('UserLog', backref='user')  # 会员日志外键关系关联
     comments = db.relationship('Comment', backref='user')  # 评论外键关系关联
     movie_cols = db.relationship('Moviecol', backref='user')  # 评论外键关系关联
+
+    def check_pwd(self, pwd):
+        from werkzeug.security import check_password_hash
+        return check_password_hash(self.pwd, pwd)  # 如果是True代表验证成功
 
 
 class UserLog(db.Model):

@@ -11,6 +11,11 @@ class BaseConfig(object):
     # Redis配置
     SESSION_TYPE = 'redis'
     SESSION_REDIS = redis.Redis(host='127.0.0.1', port=6379, password='foobared')
+    import datetime
+    PERMANENT_SESSION_LIFETIME = datetime.timedelta(minutes=30)
+    import os
+    FACE_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)), "app/static/home/uploads/users/")
+    # print(os.path.abspath(os.path.dirname(__file__)))#/media/thanlon/存储盘/项目实施/开发/Flask/d5_video
 
 
 class ProductionConfig(BaseConfig):

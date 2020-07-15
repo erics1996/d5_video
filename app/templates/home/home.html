@@ -36,7 +36,7 @@
                 <span class="icon-bar"></span>
             </button>
             <a href="{{ url_for('home.index',page=1) }}" class="navbar-brand" style="width:250px;">
-                <img src="{{ url_for('static',filename='base/images/logo.png') }}" style="height:30px;">&nbsp;D5影视网
+                <img src="{{ url_for('static',filename='public/imgs/logo.png') }}" style="height:30px;">&nbsp;D5影视网
             </a>
         </div>
         <!--小屏幕导航按钮和logo-->
@@ -66,7 +66,15 @@
                 </li>
                 <li>
                     <a class="curlink" href="{{ url_for('home.user') }}"><span
-                            class="glyphicon glyphicon-user"></span>&nbsp;{{ session["user"] }}</a>
+                            class="glyphicon glyphicon-stats" style="color: green;"></span>&nbsp;已登录</a>
+                </li>
+                <li>
+                    <a href="{{url_for('home.user')}}">
+                        <i class="avatar size-L radius">
+                            <img alt="头像" src="{{url_for('static',filename='home/uploads/users/'+session.get('face'))}}" class=""
+                                  height="35px" width="35px">
+                        </i>
+                    </a>
                 </li>
                 {% else %}
                 <li>

@@ -1,0 +1,51 @@
+{% extends "home/home.html" %}
+{% block css %}
+<link rel="stylesheet" href="{{url_for('static',filename='home/css/user.css')}}/">
+{% endblock %}
+{% block content %}
+{% include "home/menu.html" %}
+<div class="col-md-9">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title"><span class="glyphicon glyphicon-map-marker"></span>&nbsp;评论记录</h3>
+        </div>
+        <div class="panel-body">
+
+            <ul class="commentList">
+                <li class="item cl">
+                    <a>
+                        <i class="avatar size-L radius">
+                            <img alt="50x50" data-src="holder.js/50x50"
+                                 src="" class="img-circle"
+                                 style="border:1px solid #abcdef;width:50px;">
+                        </i>
+                    </a>
+                    <div class="comment-main">
+                        <header class="comment-header">
+                            <div class="comment-meta">
+                                <a class="comment-author" href="{{url_for('home.user')}}">
+                                </a>
+                                <sapn>关于《》</sapn>
+                                评论于&nbsp;
+                                <!-- <time title="" datetime="">
+                                     time
+                                 </time>-->
+                            </div>
+                        </header>
+                        <div class="comment-body">
+                        </div>
+                    </div>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script>
+    $(document).ready(function () {
+        $("#m-3").addClass("active");
+    });
+</script>
+{% endblock %}
