@@ -1,6 +1,9 @@
 from flask_wtf import FlaskForm
 from wtforms.fields import StringField, PasswordField, SelectField, SubmitField
 from wtforms.validators import DataRequired, EqualTo
+from ...models import Role
+
+role_list = Role.query.all()
 
 
 class AdminForm(FlaskForm):
@@ -29,21 +32,21 @@ class AdminForm(FlaskForm):
 
     )
     repwd = PasswordField(
-        label="重复管理员密码",
+        label="重复密码",
         validators=[
-            DataRequired("请重复管理员密码！"),
+            DataRequired("请重复密码！"),
             EqualTo('pwd', message="两次密码不一致")
         ],
         description="重复密码",
         render_kw={
             "class": "form-control",
-            "placeholder": "请重复管理员密码！",
+            "placeholder": "请重复密码！",
         }
     )
     role_id = SelectField(
         label="所属角色",
         coerce=int,
-        # choices=[(v.id, v.name) for v in role_list],  # 生成角色列表，列表有角色id和名字
+        choices=[(v.id, v.name) for v in role_list],  # 生成角色列表，列表有角色id和名字
         render_kw={
             "class": "form-control",
         }

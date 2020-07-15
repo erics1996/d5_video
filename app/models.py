@@ -112,6 +112,7 @@ class Admin(db.Model):
     name = db.Column(db.String(100), unique=True)  # 管理员账号
     pwd = db.Column(db.String(100))  # 管理员密码
     is_super = db.Column(db.SmallInteger)  # 是否为超级管理员，0为超级管理员
+    add_time = db.Column(db.DateTime, index=True, default=datetime.now)  # 创建时间
 
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'))  # 所属角色
 
