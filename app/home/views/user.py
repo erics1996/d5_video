@@ -134,6 +134,11 @@ def user():
 @home.route("/pwd/", methods=["GET", "POST"])
 def pwd():
     form = PwdForm()
+    if form.validate_on_submit():
+        data = form.data
+        if data['old_pwd'] == data['new_pwd']:
+            flash('新旧密码相同，系统不做修改！', 'err')
+            return redirect(url_for('home.pwd'))
     return render_template('home/pwd.html', form=form)
 
 

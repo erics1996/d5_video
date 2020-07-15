@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm  # FlaskForm是表单的基类
 from wtforms import StringField, PasswordField, SubmitField, FileField, TextAreaField
-from wtforms.validators import DataRequired, ValidationError, EqualTo, Email, Regexp
+from wtforms.validators import DataRequired, ValidationError, EqualTo, Email, Regexp, Length
 from ...models import User
 
 
@@ -76,19 +76,19 @@ class RegisterForm(FlaskForm):
     def validate_name(self, field):
         name = field.data
         user = User.query.filter_by(name=name).count()
-        if user >= 1:
+        if user == 1:
             raise ValidationError('账号已经存在！')
 
     def validate_phone(self, field):
         phone = field.data
         user = User.query.filter_by(phone=phone).count()
-        if user >= 1:
+        if user == 1:
             raise ValidationError('该手机号已被注册！')
 
     def validate_email(self, field):
         email = field.data
         user = User.query.filter_by(email=email).count()
-        if user >= 1:
+        if user == 1:
             raise ValidationError('该邮箱已被注册！')
 
 
@@ -204,25 +204,31 @@ class PwdForm(FlaskForm):
     old_pwd = PasswordField(
         label="旧密码",
         validators=[
-            DataRequired("请输入旧密码！")
+            DataRequired("请输入旧密码！"),
+            Length(min=6, max=18, message="密码必须在%(min)d~%(max)d位数之间！")
         ],
         description="密码",
         render_kw={
             "class": "form-control",
             "placeholder": "请输入旧密码！",
-            "id": "input_pwd"
+            "id": "input_pwd",
+            'minlength': '6',
+            'maxlength': '20',
         }
     )
     new_pwd = PasswordField(
         label="新密码",
         validators=[
-            DataRequired("请输入新密码！")
+            DataRequired("请输入新密码！"),
+            Length(min=6, max=18, message="密码必须在%(min)d~%(max)d位数之间！")
         ],
         description="新密码",
         render_kw={
             "class": "form-control",
             "placeholder": "请输入新密码！",
-            "id": "input_newpwd"
+            "id": "input_newpwd",
+            'minlength': '6',
+            'maxlength': '20',
         }
     )
     submit = SubmitField(
@@ -234,10 +240,10 @@ class PwdForm(FlaskForm):
 
     def validate_old_pwd(self, field):
         from flask import session
-        pwd = field.data
-        name = session["users"]  # 获取用户名
+        old_pwd_input = field.data
+        name = session["user"]
         user = User.query.filter_by(
             name=name
         ).first()
-        if not user.check_pwd(pwd):
+        if not user.check_pwd(old_pwd_input):
             raise ValidationError("旧密码错误！")
