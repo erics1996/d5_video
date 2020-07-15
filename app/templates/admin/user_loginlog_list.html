@@ -5,23 +5,16 @@
     <section class="content-header">
         <h1>D5影视网后台管理</h1>
         <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> 权限管理</a></li>
-            <li class="active">权限列表</li>
+            <li><a href="#"><i class="fa fa-dashboard"></i> 日志管理</a></li>
+            <li class="active">会员登录日志列表</li>
         </ol>
     </section>
     <section class="content" id="showcontent">
         <div class="row">
             <div class="col-md-12">
                 <div class="box box-primary">
-                    {% for msg in get_flashed_messages(category_filter=["okey"]) %}
-                        <div class="alert alert-success alert-dismissible">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                            <h4><i class="icon fa fa-check"></i> 操作成功</h4>
-                            {{ msg }}
-                        </div>
-                    {% endfor %}
                     <div class="box-header">
-                        {#                    <h3 class="box-title">权限列表</h3>#}
+                        {#                        <h3 class="box-title">会员登录日志列表</h3>#}
                         <div class="box-tools">
                             <div class="input-group input-group-sm" style="width: 150px;">
                                 <input type="text" name="table_search" class="form-control pull-right"
@@ -39,30 +32,34 @@
                             <tbody>
                             <tr>
                                 <th>编号</th>
-                                <th>名称</th>
-                                <th>地址</th>
-                                <th>添加时间</th>
-                                <th>操作事项</th>
+                                <th>会员</th>
+                                <th>登录时间</th>
+                                <th>登录IP</th>
                             </tr>
                             {% for v in page_data.items %}
                                 <tr>
                                     <td>{{ v.id }}</td>
-                                    <td>{{ v.name }}</td>
-                                    <td>{{ v.url }}</td>
+                                    <td>{{ v.user.id }}</td>
                                     <td>{{ v.add_time }}</td>
-                                    <td>
-                                        <a href="{{ url_for('admin.auth_edit',id=v.id) }}" class="label label-success">编辑</a>
-                                        &nbsp;
-                                        <a href="{{ url_for('admin.auth_del',id=v.id) }}"
-                                           class="label label-danger">删除</a>
-                                    </td>
+                                    <td>{{ v.ip }}</td>
                                 </tr>
                             {% endfor %}
                             </tbody>
                         </table>
                     </div>
                     <div class="box-footer clearfix">
-                        {{ pg.page(page_data,'admin.auth_list') }}
+                        <!--
+                        <ul class="pagination pagination-sm no-margin pull-right">
+                            <li><a href="#">首页</a></li>
+                            <li><a href="#">上一页</a></li>
+                            <li><a href="#">1</a></li>
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">3</a></li>
+                            <li><a href="#">下一页</a></li>
+                            <li><a href="#">尾页</a></li>
+                         </ul>
+                         -->
+                        {{ pg.page(page_data,'admin.user_loginlog_list') }}
                     </div>
                 </div>
             </div>
@@ -73,10 +70,9 @@
 {% block js %}
     <script>
         $(document).ready(function () {
-            $("#g-9").addClass("active");
-            $("#g-9-2").addClass("active");
+            $("#g-8").addClass("active");
+            $("#g-8-3").addClass("active");
         });
-
 
     </script>
 {% endblock %}
