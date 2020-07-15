@@ -12,7 +12,7 @@ class BaseConfig(object):
     SESSION_TYPE = 'redis'
     SESSION_REDIS = redis.Redis(host='127.0.0.1', port=6379, password='foobared')
     import datetime
-    PERMANENT_SESSION_LIFETIME = datetime.timedelta(minutes=5)
+    PERMANENT_SESSION_LIFETIME = datetime.timedelta(minutes=30)
 
 
 class ProductionConfig(BaseConfig):
