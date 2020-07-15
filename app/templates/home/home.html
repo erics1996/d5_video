@@ -17,6 +17,7 @@
         .navbar-brand > img {
             display: inline;
         }
+
         .media {
             padding: 3px;
             border: 1px solid #ccc
@@ -65,7 +66,15 @@
                 </li>
                 <li>
                     <a class="curlink" href="{{ url_for('home.user') }}"><span
-                            class="glyphicon glyphicon-user"></span>&nbsp;{{ session["user"] }}</a>
+                            class="glyphicon glyphicon-stats" style="color: green;"></span>&nbsp;已登录</a>
+                </li>
+                <li>
+                    <a href="{{url_for('home.user')}}">
+                        <i class="avatar size-L radius">
+                            <img alt="头像" src="{{url_for('static',filename='home/uploads/users/'+session.get('face'))}}" class=""
+                                 style="border:1px solid #abcdef;" height="35px" width="35px">
+                        </i>
+                    </a>
                 </li>
                 {% else %}
                 <li>

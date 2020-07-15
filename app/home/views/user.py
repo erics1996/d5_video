@@ -21,9 +21,10 @@ def register():
                 email=data["email"],
                 phone=data["phone"],
                 pwd=generate_password_hash(data["pwd"]),
-                uuid=uuid.uuid4().hex
+                uuid=uuid.uuid4().hex,
+                face='9825bc315c6034a86bd349b813468252092376b6.jpeg',
             )
-            # print(user)  # <User (transient 140110428913776)>
+            # print(users)  # <User (transient 140110428913776)>
             db.session.add(user)
             db.session.commit()
             db.session.remove()
@@ -45,6 +46,7 @@ def login():
                 return redirect(url_for("home.login"))
             session["user"] = user.name
             session["user_id"] = user.id
+            session['face'] = user.face
             user_log = UserLog(
                 user_id=user.id,
                 ip=request.remote_addr
@@ -52,7 +54,7 @@ def login():
             db.session.add(user_log)
             db.session.commit()
             db.session.remove()
-            return redirect(url_for("home.user"))
+            return redirect(url_for("home.index"))
     return render_template('home/login.html', form=form)
 
 
@@ -75,17 +77,19 @@ def user_login_decorator(func):
 
 
 # 修改会员基本资料
-@home.route("/user/", methods=["GET", "POST"])
+@home.route("/users/", methods=["GET", "POST"])
 @user_login_decorator
 def user():
     form = UserDetailForm()
-    user = User.query.get(int(session["user_id"]))
-    # print(user)  # <User 1>
-    form.name.data = user.name
-    form.nickname.data = user.nickname
-    form.email.data = user.email
-    form.phone.data = user.phone
-    form.info.data = user.info
+    if request.method == "GET":
+        user = User.query.get(int(session["user_id"]))
+        # print(users)  # <User 1>
+        form.name.data = user.name
+        form.nickname.data = user.nickname
+        form.email.data = user.email
+        form.phone.data = user.phone
+        form.info.data = user.info
+
     return render_template("home/user.html", form=form, user=user)
 
 

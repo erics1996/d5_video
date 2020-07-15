@@ -235,7 +235,7 @@ class PwdForm(FlaskForm):
     def validate_old_pwd(self, field):
         from flask import session
         pwd = field.data
-        name = session["user"]  # 获取用户名
+        name = session["users"]  # 获取用户名
         user = User.query.filter_by(
             name=name
         ).first()

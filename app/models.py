@@ -12,7 +12,7 @@ class User(db.Model):
     email = db.Column(db.String(100), unique=True)
     phone = db.Column(db.String(11), unique=True)
     info = db.Column(db.Text)  # 个性简介
-    face = db.Column(db.String(255), unique=True)  # 头像
+    face = db.Column(db.String(255))  # 头像
     add_time = db.Column(db.DateTime, index=True, default=datetime.now)
     uuid = db.Column(db.String(255), unique=True)  # 唯一标识符
 

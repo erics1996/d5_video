@@ -42,7 +42,7 @@ def upgrade():
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )
-    op.create_table('user',
+    op.create_table('users',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=100), nullable=True),
     sa.Column('pwd', sa.String(length=100), nullable=True),
@@ -59,7 +59,7 @@ def upgrade():
     sa.UniqueConstraint('phone'),
     sa.UniqueConstraint('uuid')
     )
-    op.create_index(op.f('ix_user_add_time'), 'user', ['add_time'], unique=False)
+    op.create_index(op.f('ix_user_add_time'), 'users', ['add_time'], unique=False)
     op.create_table('admin',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=100), nullable=True),
@@ -95,7 +95,7 @@ def upgrade():
     sa.Column('ip', sa.String(length=100), nullable=True),
     sa.Column('add_time', sa.DateTime(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('admin_log',
@@ -114,7 +114,7 @@ def upgrade():
     sa.Column('movie_id', sa.Integer(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['movie_id'], ['movie.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('movie_col',
@@ -123,7 +123,7 @@ def upgrade():
     sa.Column('movie_id', sa.Integer(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['movie_id'], ['movie.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('op_log',
@@ -148,8 +148,8 @@ def downgrade():
     op.drop_table('user_log')
     op.drop_table('movie')
     op.drop_table('admin')
-    op.drop_index(op.f('ix_user_add_time'), table_name='user')
-    op.drop_table('user')
+    op.drop_index(op.f('ix_user_add_time'), table_name='users')
+    op.drop_table('users')
     op.drop_table('tag')
     op.drop_table('role')
     op.drop_table('preview')
