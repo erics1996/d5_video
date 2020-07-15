@@ -33,7 +33,7 @@ def register():
             db.session.commit()
             db.session.remove()
             flash("注册成功，开始登录吧！", "ok")
-            return redirect(url_for('home.login'))
+            return redirect(url_for('home.login', next=request.url))
     return render_template('home/register.html', form=form)
 
 
@@ -47,7 +47,7 @@ def login():
             user = User.query.filter_by(name=data["name"]).first()
             if not user or not user.check_pwd(data["pwd"]):
                 flash("账号或密码错误！", "err")
-                return redirect(url_for("home.login"))
+                return redirect(url_for("home.login", next=request.url))
             session["user"] = user.name
             session["user_id"] = user.id
             session['face'] = user.face
@@ -67,7 +67,7 @@ def logout():
     if session.get('user') and session.get('user_id'):
         session.pop('user', None)
         session.pop('user_id', None)
-    return redirect(url_for('home.login'))
+    return redirect(url_for('home.login', next=request.url))
 
 
 def user_login_decorator(func):
