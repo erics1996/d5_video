@@ -7,3 +7,8 @@ import app.admin.views.tag
 import app.admin.views.movie
 import app.admin.views.preview
 import app.admin.views.user
+import app.admin.views.comment
+import app.admin.views.moviecol
+import app.admin.views.oplog
+import app.admin.views.auth
+import app.admin.views.role

@@ -31,3 +31,9 @@ def admin_add():
 @admin.route("/admin/list/<int:page>", methods=["GET"])
 def admin_list(page=None):
     return ''
+
+
+# 管理员登录日志表
+@admin.route("/admin/list/<int:page>", methods=["GET"])
+def admin_loginlog_list(page):
+    return ''

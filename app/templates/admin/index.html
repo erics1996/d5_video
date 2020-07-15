@@ -2,7 +2,7 @@
 {% block content %}
 <!--内容-->
 <section class="content-header">
-    <h1>微电影管理系统</h1>
+    <h1>D5影视网</h1>
     <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
         <li class="active">控制面板</li>
@@ -52,7 +52,7 @@
 <!--内容-->
 {% endblock %}
 {% block js %}
-<script src="{{url_for('static',filename='js/echarts.min.js')}}"></script>
+<script src="{{url_for('static',filename='admin/js/echarts.min.js')}}"></script>
 <script>
     var myChart = echarts.init(document.getElementById('meminfo'));
     option = {
