@@ -35,7 +35,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="{{ url_for('home.index',page=1) }}" class="navbar-brand" style="width:250px;">
+            <a href="{{ url_for('home.index') }}" class="navbar-brand" style="width:250px;">
                 <img class="wow animate__animated animate__flip"
                      src="{{ url_for('static',filename='public/imgs/logo.png') }}" style="height:30px;">&nbsp;D5影视网
             </a>
@@ -56,13 +56,13 @@
                 <li>
                     <a class="curlink" href="{{ url_for('home.index') }}"><span class="glyphicon glyphicon-film"></span>&nbsp;电影</a>
                 </li>
-                <li>
-                    <a class="curlink" href="{{ url_for('home.index') }}"><span
-                            class="glyphicon glyphicon-music"></span>&nbsp;音乐MV</a>
-                </li>
-                <li>
-                    <a class="curlink" href="{{ url_for('home.index') }}"><span class="glyphicon glyphicon-fire"></span>&nbsp;动漫</a>
-                </li>
+                {#                <li>#}
+                {#                    <a class="curlink" href="{{ url_for('home.index') }}"><span#}
+                {#                            class="glyphicon glyphicon-music"></span>&nbsp;音乐MV</a>#}
+                {#                </li>#}
+                {#                <li>#}
+                {#                    <a class="curlink" href="{{ url_for('home.index') }}"><span class="glyphicon glyphicon-fire"></span>&nbsp;动漫</a>#}
+                {#                </li>#}
                 <!--<li>-->
                 <!--<a class="curlink" href="{{ url_for('home.login') }}"><span-->
                 <!--class="glyphicon glyphicon-log-in"></span>&nbsp;登录</a>-->
@@ -112,7 +112,7 @@
 </div>
 <!--内容-->
 <!--底部-->
-<footer style="margin-top: 10px">
+<footer style="margin-top: 0;padding: 3px">
     <div class="container">
         <div class="row">
             <div class="col-md-12">

@@ -38,31 +38,31 @@
                     <h3 class="panel-title" style=""><span class="glyphicon glyphicon-facetime-video"></span>&nbsp;电影介绍
                     </h3>
                 </div>
-                <div class="panel-body" style="height:433px;overflow:scroll;">
+                <div class="panel-body" style="height:453px;overflow:scroll;padding: 0">
                     <table class="table">
                         <tr>
-                            <td style="width:30%;color:#ccc;font-weight:bold;">
+                            <td style="color:#ccc;font-weight:bold;">
                                 <span class="glyphicon glyphicon-film"></span>&nbsp;片名
                             </td>
-                            <td>《{{ movie.title }}》</td>
+                            <td style="font-size: 13px">{{ movie.title }}</td>
                         </tr>
                         <tr>
                             <td style="color:#ccc;font-weight:bold;">
                                 <span class="glyphicon glyphicon-tag"></span>&nbsp;标签
                             </td>
-                            <td>{{ movie.tag.name }}</td>
+                            <td style="font-size: 13px">{{ movie.tag.name }}</td>
                         </tr>
                         <tr>
                             <td style="color:#ccc;font-weight:bold;">
                                 <span class="glyphicon glyphicon-time"></span>&nbsp;片长
                             </td>
-                            <td>{{ movie.length }}</td>
+                            <td style="font-size: 13px">{{ movie.length }}</td>
                         </tr>
                         <tr>
                             <td style="color:#ccc;font-weight:bold;">
                                 <span class="glyphicon glyphicon-map-marker"></span>&nbsp;地区
                             </td>
-                            <td>{{ movie.area }}</td>
+                            <td style="font-size: 13px">{{ movie.area }}</td>
                         </tr>
                         <tr>
                             <td style="color:#ccc;font-weight:bold;">
@@ -83,25 +83,25 @@
                             <td style="color:#ccc;font-weight:bold;">
                                 <span class="glyphicon glyphicon-calendar"></span>&nbsp;上映时间
                             </td>
-                            <td>{{ movie.release_time }}</td>
+                            <td style="font-size: 13px">{{ movie.release_time }}</td>
                         </tr>
                         <tr>
-                            <td style="width:40%;color:#ccc;font-weight:bold;">
+                            <td style="width:36%;color:#ccc;font-weight:bold;">
                                 <span class="glyphicon glyphicon-play"></span>&nbsp;播放数量
                             </td>
-                            <td>{{ movie.play_num }}</td>
+                            <td style="font-size: 13px">{{ movie.play_num }}</td>
                         </tr>
                         <tr>
                             <td style="color:#ccc;font-weight:bold;">
                                 <span class="glyphicon glyphicon-comment"></span>&nbsp;评论数量
                             </td>
-                            <td>{{ movie.comment_num }}</td>
+                            <td style="font-size: 13px">{{ movie.comment_num }}</td>
                         </tr>
                         <tr>
                             <td style="color:#ccc;font-weight:bold;">
                                 <span class="glyphicon glyphicon-picture"></span>&nbsp;影片介绍
                             </td>
-                            <td>
+                            <td style="font-size: 13px">
                                 {{ movie.info }}
                             </td>
                         </tr>
@@ -142,7 +142,9 @@
                                     <textarea id="input_content"></textarea>
                                 </div>
                                 <p style="color:red;font-weight: bold">{{ err }}</p>
-                                <button class="btn btn-success" id="btn-sub"><span class="glyphicon glyphicon-ok"></span>&nbsp;提交评论</button>
+                                <button class="btn btn-success" id="btn-sub"><span
+                                        class="glyphicon glyphicon-ok"></span>&nbsp;提交评论
+                                </button>
                             </div>
                         </form>
                     {% endif %}
