@@ -1,0 +1,452 @@
+{% extends "home/home.html" %}
+{#{% import "home/comment_page.html" as pg %}#}
+{% block css %}
+    <style>
+        .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9 {
+            padding-right: 3px;
+            padding-left: 3px;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-9">
+            <div class="videosamplex">
+                <video id="videoplayer">Loading the player ...</video>
+            </div>
+            <div class="form-inline" style="margin: 5px 0">
+                <div class="form-group">
+                    <div class="input-group">
+                        {#<div class="input-group-addon">$</div>#}
+                        <input type="text" class="form-control" id="bulletChat" placeholder="请文明用语" value="可以发送弹幕了啊~~">
+                        <div class="input-group-addon btn" style="background: #0682f5;color: white;"
+                             onclick="newDanmu('sdsd')">发送弹幕
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <h3 class="panel-title" style=""><span class="glyphicon glyphicon-facetime-video"></span>&nbsp;电影介绍
+                    </h3>
+                </div>
+                <div class="panel-body" style="height:433px;overflow:scroll;">
+                    <table class="table">
+                        <tr>
+                            <td style="width:30%;color:#ccc;font-weight:bold;">
+                                <span class="glyphicon glyphicon-film"></span>&nbsp;片名
+                            </td>
+                            <td>《{{ movie.title }}》</td>
+                        </tr>
+                        <tr>
+                            <td style="color:#ccc;font-weight:bold;">
+                                <span class="glyphicon glyphicon-tag"></span>&nbsp;标签
+                            </td>
+                            <td>{{ movie.tag.name }}</td>
+                        </tr>
+                        <tr>
+                            <td style="color:#ccc;font-weight:bold;">
+                                <span class="glyphicon glyphicon-time"></span>&nbsp;片长
+                            </td>
+                            <td>{{ movie.length }}</td>
+                        </tr>
+                        <tr>
+                            <td style="color:#ccc;font-weight:bold;">
+                                <span class="glyphicon glyphicon-map-marker"></span>&nbsp;地区
+                            </td>
+                            <td>{{ movie.area }}</td>
+                        </tr>
+                        <tr>
+                            <td style="color:#ccc;font-weight:bold;">
+                                <span class="glyphicon glyphicon-star"></span>&nbsp;星级
+                            </td>
+                            <td>
+                                <div>
+                                    {% for val in range(1,movie.star+1) %}
+                                        <span class="glyphicon glyphicon-star" style="color:#FFD119"></span>
+                                    {% endfor %}
+                                    {% for val in range(1,5-movie.star+1) %}
+                                        <span class="glyphicon glyphicon-star-empty" style="color:#FFD119"></span>
+                                    {% endfor %}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="color:#ccc;font-weight:bold;">
+                                <span class="glyphicon glyphicon-calendar"></span>&nbsp;上映时间
+                            </td>
+                            <td>{{ movie.release_time }}</td>
+                        </tr>
+                        <tr>
+                            <td style="width:40%;color:#ccc;font-weight:bold;">
+                                <span class="glyphicon glyphicon-play"></span>&nbsp;播放数量
+                            </td>
+                            <td>{{ movie.play_num }}</td>
+                        </tr>
+                        <tr>
+                            <td style="color:#ccc;font-weight:bold;">
+                                <span class="glyphicon glyphicon-comment"></span>&nbsp;评论数量
+                            </td>
+                            <td>{{ movie.comment_num }}</td>
+                        </tr>
+                        <tr>
+                            <td style="color:#ccc;font-weight:bold;">
+                                <span class="glyphicon glyphicon-picture"></span>&nbsp;影片介绍
+                            </td>
+                            <td>
+                                {{ movie.info }}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12" style="margin-top:6px;">
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><span class="glyphicon glyphicon-comment"></span>&nbsp;电影评论</h3>
+                </div>
+                <div class="panel-body">
+                    {% if "user" not in session %}
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span aria-hidden="true">×</span>
+                                <span class="sr-only">Close</span>
+                            </button>
+                            <strong>请先<a href="{{ url_for('home.login') }}" target=""
+                                         class="text-info">登录</a>，才可参与评论！</strong>
+                        </div>
+                    {% endif %}
+                    <ol class="breadcrumb" style="margin-top:6px;">
+                        <li>全部评论({{ movie.commentnum }})</li>
+                    </ol>
+                    {% for msg in get_flashed_messages(category_filter=["ok"]) %}
+                        <div class="alert alert-success alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            {{ msg }}
+                        </div>
+                    {% endfor %}
+                    {% if "user" in session %}
+                        <form role="form" style="margin-bottom:6px;" method="post">
+                            <div class="form-group">
+                                <div>
+                                    <label for="input_content">{{ form.content.label }}</label>
+                                    <!--<textarea id="input_content"></textarea>-->
+                                    {{ form.content }}
+                                </div>
+                                {% for err in form.content.errors %}
+                                    <div class="col-md-12">
+                                        <font style="color:red">{{ err }}</font>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <!--<a class="btn btn-success" id="btn-sub"><span class="glyphicon glyphicon-edit"></span>&nbsp;提交评论</a>-->
+                            {{ form.csrf_token }}
+                            &nbsp;{{ form.submit }}
+                            <a class="btn btn-danger" id="btn-col"><span class="glyphicon glyphicon-heart"></span>&nbsp;收藏电影</a>
+                        </form>
+                    {% endif %}
+                    <ul class="commentList">
+                        <li class="item cl">
+                            <a href="user.html">
+                                <i class="avatar size-L radius">
+                                    <img alt="50x50" src="holder.js/50x50" class="img-circle"
+                                         style="border:1px solid #abcdef;">
+                                </i>
+                            </a>
+                            <div class="comment-main">
+                                <header class="comment-header">
+                                    <div class="comment-meta">
+                                        <a class="comment-author" href="user.html">xiaoli</a>
+                                        评论于
+                                        <time title="2016-12-07 09:12:51" datetime="2016-12-07 09:12:51">2017-03-01
+                                            09:12:51
+                                        </time>
+                                    </div>
+                                </header>
+                                <div class="comment-body">
+                                    <p>这电影真好看！</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="item cl">
+                            <a href="user.html">
+                                <i class="avatar size-L radius">
+                                    <img alt="50x50" src="holder.js/50x50" class="img-circle"
+                                         style="border:1px solid #abcdef;">
+                                </i>
+                            </a>
+                            <div class="comment-main">
+                                <header class="comment-header">
+                                    <div class="comment-meta">
+                                        <a class="comment-author" href="user.html">xiaoli</a>
+                                        评论于
+                                        <time title="2016-12-07 09:12:51" datetime="2016-12-07 09:12:51">2017-03-01
+                                            09:12:51
+                                        </time>
+                                    </div>
+                                </header>
+                                <div class="comment-body">
+                                    <p>这电影真好看！</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="item cl">
+                            <a href="user.html">
+                                <i class="avatar size-L radius">
+                                    <img alt="50x50" src="holder.js/50x50" class="img-circle"
+                                         style="border:1px solid #abcdef;">
+                                </i>
+                            </a>
+                            <div class="comment-main">
+                                <header class="comment-header">
+                                    <div class="comment-meta">
+                                        <a class="comment-author" href="user.html">xiaoli</a>
+                                        评论于
+                                        <time title="2016-12-07 09:12:51" datetime="2016-12-07 09:12:51">2017-03-01
+                                            09:12:51
+                                        </time>
+                                    </div>
+                                </header>
+                                <div class="comment-body">
+                                    <p>这电影真好看！</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="item cl">
+                            <a href="user.html">
+                                <i class="avatar size-L radius">
+                                    <img alt="50x50" src="holder.js/50x50" class="img-circle"
+                                         style="border:1px solid #abcdef;">
+                                </i>
+                            </a>
+                            <div class="comment-main">
+                                <header class="comment-header">
+                                    <div class="comment-meta">
+                                        <a class="comment-author" href="user.html">xiaoli</a>
+                                        评论于
+                                        <time title="2016-12-07 09:12:51" datetime="2016-12-07 09:12:51">2017-03-01
+                                            09:12:51
+                                        </time>
+                                    </div>
+                                </header>
+                                <div class="comment-body">
+                                    <p>这电影真好看！</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="item cl">
+                            <a href="user.html">
+                                <i class="avatar size-L radius">
+                                    <img alt="50x50" src="holder.js/50x50" class="img-circle"
+                                         style="border:1px solid #abcdef;">
+                                </i>
+                            </a>
+                            <div class="comment-main">
+                                <header class="comment-header">
+                                    <div class="comment-meta">
+                                        <a class="comment-author" href="user.html">xiaoli</a>
+                                        评论于
+                                        <time title="2016-12-07 09:12:51" datetime="2016-12-07 09:12:51">2017-03-01
+                                            09:12:51
+                                        </time>
+                                    </div>
+                                </header>
+                                <div class="comment-body">
+                                    <p>这电影真好看！</p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="col-md-12 text-center">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination">
+                                <li>
+                                    <a href="#" aria-label="First">
+                                        <span aria-hidden="true">首页</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" aria-label="Previous">
+                                        <span aria-hidden="true">上一页</span>
+                                    </a>
+                                </li>
+                                <li><a href="#">1&nbsp;/&nbsp;10</a></li>
+                                <li>
+                                    <a href="#" aria-label="Next">
+                                        <span aria-hidden="true">下一页</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" aria-label="Last">
+                                        <span aria-hidden="true">尾页</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script type="text/javascript" src="{{ url_for('static',filename='home/ckplayer/js/ckplayer.js') }}"></script>
+    <script type="text/javascript">
+        var videoObject = {
+            container: '.videosamplex',//“#”代表容器的ID，“.”或“”代表容器的class
+            variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
+            {#poster: '{{ url_for('static',filename='admin/uploads/movielogos/')+movie.logo }}',//封面图片#}
+            mobileCkControls: true,//是否在移动端（包括ios）环境中显示控制栏
+            mobileAutoFull: true,//在移动端播放后是否按系统设置的全屏播放
+            h5container: '#videoplayer',//h5环境中使用自定义容器
+            autoplay: true,
+            //loop: true, //播放结束是否循环播放
+            volume: 0.5,
+            //video: '{{ url_for('static',filename='admin/uploads/movies/')+movie.url }}'//视频地址
+            {#video: [#}
+            {#    ["{{ url_for('static',filename='admin/uploads/movies/')+movie.url }}", 'video/mp4', '标清', 1],#}
+            {#    ["{{ url_for('static',filename='admin/uploads/movies/')+movie.url }}", 'video/mp4', '高清', 0],#}
+            {#    ["{{ url_for('static',filename='admin/uploads/movies/')+movie.url }}", 'video/mp4', '蓝光', 2],#}
+            {#]#}
+            video: [
+                ["{{ url_for('static',filename='admin/uploads/movies/')+movie.url }}", 'video/mp4', '标清', 0],
+                ["{{ url_for('static',filename='admin/uploads/movies/')+movie.url }}", 'video/mp4', '高清', 0],
+                ["{{ url_for('static',filename='admin/uploads/movies/')+movie.url }}", 'video/mp4', '超清', 0],
+            ]//视频地址
+        };
+        var player = new ckplayer(videoObject);
+
+        function loadedHandler() {
+        }
+
+        var y = 0;
+        var DArr = [];//弹幕数组
+        var YArr = [];//元件数组
+        function newDanmu() {
+            var txt = $("#bulletChat").val();
+            //弹幕说明
+            y += 20;
+            if (y > 300) y = 0;
+            var danmuObj = {
+                list: [{
+                    type: 'image', //定义元素类型：只有二种类型，image=使用图片，text=文本
+                    file: '{{ url_for('static',filename='home/uploads/users/'+session.get('face'))}}', //图片地址
+                    radius: 30, //图片圆角弧度
+                    width: 30, //定义图片宽，必需要定义
+                    height: 30, //定义图片高，必需要定义
+                    alpha: 0.9, //图片透明度(0-1)
+                    marginLeft: 10, //图片离左边的距离
+                    marginRight: 10, //图片离右边的距离
+                    marginTop: 10, //图片离上边的距离
+                    marginBottom: 10, //图片离下边的距离
+                    clickEvent: "link->http://"
+                }, {
+                    type: 'text', //说明是文本
+                    text: txt, //文本内容
+                    color: '0xFFDD00', //文本颜色
+                    size: 14, //文本字体大小，单位：px
+                    font: '"Microsoft YaHei", YaHei, "微软雅黑", SimHei,"\5FAE\8F6F\96C5\9ED1", "黑体",Arial', //文本字体
+                    leading: 30, //文字行距
+                    alpha: 1, //文本透明度(0-1)
+                    paddingLeft: 10, //文本内左边距离
+                    paddingRight: 10, //文本内右边距离
+                    paddingTop: 0, //文本内上边的距离
+                    paddingBottom: 0, //文本内下边的距离
+                    marginLeft: 0, //文本离左边的距离
+                    marginRight: 10, //文本离右边的距离
+                    marginTop: 10, //文本离上边的距离
+                    marginBottom: 0, //文本离下边的距离
+                    backgroundColor: '0xFF0000', //文本的背景颜色
+                    backAlpha: 0.5, //文本的背景透明度(0-1)
+                    backRadius: 30, //文本的背景圆角弧度
+                    clickEvent: "actionScript->videoPlay"
+                }],
+                x: '100%', //x轴坐标
+                y: y, //y轴坐标
+                //position:[2,1,0],//位置[x轴对齐方式（0=左，1=中，2=右），y轴对齐方式（0=上，1=中，2=下），x轴偏移量（不填写或null则自动判断，第一个值为0=紧贴左边，1=中间对齐，2=贴合右边），y轴偏移量（不填写或null则自动判断，0=紧贴上方，1=中间对齐，2=紧贴下方）]
+                alpha: 1,
+                //backgroundColor:'#FFFFFF',
+                backAlpha: 0.8,
+                backRadius: 30 //背景圆角弧度
+            }
+            var danmu = player.addElement(danmuObj);
+            var danmuS = player.getElement(danmu);
+            var obj = {
+                element: danmu,
+                parameter: 'x',
+                static: true, //是否禁止其它属性，true=是，即当x(y)(alpha)变化时，y(x)(x,y)在播放器尺寸变化时不允许变化
+                effect: 'None.easeOut',
+                start: null,
+                end: -danmuS['width'] + 300,
+                speed: 10,
+                overStop: true,
+                pauseStop: true,
+                callBack: 'deleteChild'
+            };
+            var danmuAnimate = player.animate(obj);
+            DArr.push(danmuAnimate);
+            console.log(danmu);
+            YArr.push(danmu);
+        }
+
+        function deleteChild(ele) {
+            if (player) {
+                player.deleteElement(ele);
+                if (YArr.indexOf(ele) > -1) {//在YArr也就是保存弹幕的全局变量里搜索该弹幕，然后删除
+                    var n = YArr.indexOf(ele);
+                    console.log(n)
+                    YArr.splice(n, 1);
+                }
+            }
+        }
+
+        function delDanmu() {
+            for (var i = 0; i < DArr.length; i++) {
+                console.log(DArr[i])
+                if (player) {
+                    try {
+                        player.deleteAnimate(DArr[i]);
+                        //player.deleteElement(YArr[i]);
+                    } catch (error) {
+                        console.log(error);
+                    }
+                }
+            }
+        }
+
+        function getCoor() {
+            for (var i = 0; i < YArr.length; i++) {
+                console.log(player.getElement(YArr[i]));
+                //这里可以直接输出所有的弹幕，不能获取到的会返回null
+            }
+        }
+    </script>
+    <script type="text/javascript" src="{{ url_for('static',filename='ueditor/ueditor.config.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='ueditor/ueditor.all.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='ueditor/lang/zh-cn/zh-cn.js') }}"></script>
+    <script>
+        SyntaxHighlighter.all();
+    </script>
+    <script src="{{ url_for('static',filename='home/jwplayer/src/js/jwplayer.js') }}"></script>
+    <script>
+        var ue = UE.getEditor('input_content', {
+            toolbars: [
+                ['fullscreen', 'emotion', 'preview', 'link']
+            ],
+            initialFrameWidth: "100%",
+            initialFrameHeight: "100",
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            new WOW().init();
+            $("img.lazy").lazyload({
+                effect: "fadeIn"
+            });
+        });
+    </script>
+{% endblock %}

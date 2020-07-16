@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 import os
 from ...utils.alter_filename import change_filename
 from app import app
-from ...models import Movie
+from ...models import Movie, Tag
 
 
 # 添加电影
@@ -34,8 +34,8 @@ def movie_add():
             info=data["info"],
             logo=logo,
             star=int(data["star"]),
-            playnum=0,
-            commentnum=0,
+            play_num=0,
+            comment_num=0,
             tag_id=int(data["tag_id"]),
             area=data["area"],
             release_time=data["release_time"],
@@ -51,5 +51,11 @@ def movie_add():
 
 # 电影列表
 @admin.route("/movie/list/")
-def movie_list():
-    return ''
+def movie_list(page=None):
+    if not page:
+        page = 1
+    # page_data = Movie.query.order_by(Movie.add_time.desc()).paginate(page=page, per_page=10)
+    page_data = Movie.query.join(Tag).filter(
+        Movie.tag_id == Tag.id
+    ).order_by(Movie.add_time.desc()).paginate(page=page, per_page=10)
+    return render_template("admin/movie_list.html", page_data=page_data)
