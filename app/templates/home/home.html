@@ -17,6 +17,7 @@
         .navbar-brand > img {
             display: inline;
         }
+
         .media {
             padding: 3px;
             border: 1px solid #ccc
@@ -35,7 +36,8 @@
                 <span class="icon-bar"></span>
             </button>
             <a href="{{ url_for('home.index',page=1) }}" class="navbar-brand" style="width:250px;">
-                <img class="wow animate__animated animate__flip" src="{{ url_for('static',filename='public/imgs/logo.png') }}" style="height:30px;" >&nbsp;D5影视网
+                <img class="wow animate__animated animate__flip"
+                     src="{{ url_for('static',filename='public/imgs/logo.png') }}" style="height:30px;">&nbsp;D5影视网
             </a>
         </div>
         <!--小屏幕导航按钮和logo-->
@@ -54,41 +56,49 @@
                 <li>
                     <a class="curlink" href="{{ url_for('home.index') }}"><span class="glyphicon glyphicon-film"></span>&nbsp;电影</a>
                 </li>
+                <li>
+                    <a class="curlink" href="{{ url_for('home.index') }}"><span
+                            class="glyphicon glyphicon-music"></span>&nbsp;音乐MV</a>
+                </li>
+                <li>
+                    <a class="curlink" href="{{ url_for('home.index') }}"><span class="glyphicon glyphicon-fire"></span>&nbsp;动漫</a>
+                </li>
                 <!--<li>-->
                 <!--<a class="curlink" href="{{ url_for('home.login') }}"><span-->
                 <!--class="glyphicon glyphicon-log-in"></span>&nbsp;登录</a>-->
                 <!--</li>-->
                 {% if "user" in session %}
-                <li>
-                    <a class="curlink" href="{{ url_for('home.logout') }}"><span
-                            class="glyphicon glyphicon-log-out"></span>&nbsp;退出</a>
-                </li>
-                <li>
-                    <a class="curlink" href="{{ url_for('home.user') }}"><span
-                            class="glyphicon glyphicon-stats" style="color: green;"></span>&nbsp;已登录</a>
-                </li>
-                <li>
-                    <a href="{{url_for('home.user')}}">
-                        <i class="avatar size-L radius">
-                            <img alt="头像" src="{{url_for('static',filename='home/uploads/users/'+session.get('face'))}}"
-                                 class=""
-                                 height="30px" width="30px">
-                        </i>
-                    </a>
-                </li>
+                    <li>
+                        <a class="curlink" href="{{ url_for('home.logout') }}"><span
+                                class="glyphicon glyphicon-log-out"></span>&nbsp;退出</a>
+                    </li>
+                    <li>
+                        <a class="curlink" href="{{ url_for('home.user') }}"><span
+                                class="glyphicon glyphicon-stats" style="color: green;"></span>&nbsp;已登录</a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('home.user') }}">
+                            <i class="avatar size-L radius">
+                                <img alt="头像"
+                                     src="{{ url_for('static',filename='home/uploads/users/'+session.get('face')) }}"
+                                     class=""
+                                     height="30px" width="30px">
+                            </i>
+                        </a>
+                    </li>
                 {% else %}
-                <li>
-                    <a class="curlink" href="{{ url_for('home.login') }}"><span
-                            class="glyphicon glyphicon-log-in"></span>&nbsp;登录</a>
-                </li>
-                <li>
-                    <a class="curlink" href="{{ url_for('home.register') }}"><span
-                            class="glyphicon glyphicon-plus"></span>&nbsp;注册</a>
-                </li>
-                <li>
-                    <a class="curlink" href="{{ url_for('home.user') }}"><span
-                            class="glyphicon glyphicon-user"></span>&nbsp;会员中心</a>
-                </li>
+                    <li>
+                        <a class="curlink" href="{{ url_for('home.login') }}"><span
+                                class="glyphicon glyphicon-log-in"></span>&nbsp;登录</a>
+                    </li>
+                    <li>
+                        <a class="curlink" href="{{ url_for('home.register') }}"><span
+                                class="glyphicon glyphicon-plus"></span>&nbsp;注册</a>
+                    </li>
+                    <li>
+                        <a class="curlink" href="{{ url_for('home.user') }}"><span
+                                class="glyphicon glyphicon-user"></span>&nbsp;会员中心</a>
+                    </li>
                 {% endif %}
             </ul>
         </div>
@@ -127,7 +137,8 @@
         new WOW().init();
         $("#search").click(function () {
                 var key = $("#key_movie").val();
-                location.href = "{{url_for('home.search',page=1)}}?key=" + key;
+                {#location.href = "{{url_for('home.search',page=1)}}?key=" + key;#}
+                window.open("{{url_for('home.search',page=1)}}?key=" + key);
             }
         )
     })

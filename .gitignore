@@ -1,4 +1,6 @@
 # Byte-compiled / optimized / DLL files
+app/static/admin/uploads/movielogos/
+app/static/admin/uploads/movies
 .idea/
 __pycache__/
 *.py[cod]

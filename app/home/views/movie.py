@@ -21,4 +21,5 @@ def search(page=None):
 
 @home.route("/play/<int:id>/", methods=["GET", "POST"])
 def play(id=None):
-    return ''
+    movie = models.Movie.query.filter_by(id=id).first()
+    return render_template('home/movie_play.html', movie=movie)
