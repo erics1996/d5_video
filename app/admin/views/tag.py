@@ -31,7 +31,7 @@ def tag_list(page=None):
         page = 1
     page_data = Tag.query.order_by(
         Tag.add_time.desc()
-    ).paginate(page=page, per_page=5)
+    ).paginate(page=page, per_page=20)
     return render_template('admin/tag_list.html', page_data=page_data)
 
 

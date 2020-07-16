@@ -1,5 +1,4 @@
 {% extends "home/home.html" %}
-{#{% import "home/comment_page.html" as pg %}#}
 {% block css %}
     <style>
         .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9 {
@@ -7,6 +6,9 @@
             padding-left: 3px;
         }
     </style>
+    <script type="text/javascript" src="{{ url_for('static',filename='ueditor/ueditor.config.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='ueditor/ueditor.all.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='ueditor/lang/zh-cn/zh-cn.js') }}"></script>
 {% endblock %}
 {% block content %}
     <div class="row">
@@ -20,7 +22,11 @@
                         {#<div class="input-group-addon">$</div>#}
                         <input type="text" class="form-control" id="bulletChat" placeholder="请文明用语" value="可以发送弹幕了啊~~">
                         <div class="input-group-addon btn" style="background: #0682f5;color: white;"
-                             onclick="newDanmu('sdsd')">发送弹幕
+                             onclick="newDanmu('sdsd')"><span class="glyphicon glyphicon-send"></span>发送弹幕
+                        </div>
+
+                        <div class="input-group-addon btn" style="background: #d9534f;color: white;"
+                             onclick=""><span class="glyphicon glyphicon-heart"></span>收藏
                         </div>
                     </div>
                 </div>
@@ -106,7 +112,7 @@
         <div class="col-md-12" style="margin-top:6px;">
             <div class="panel panel-danger">
                 <div class="panel-heading">
-                    <h3 class="panel-title"><span class="glyphicon glyphicon-comment"></span>&nbsp;电影评论</h3>
+                    <h3 class="panel-title"><span class="glyphicon glyphicon-comment"></span>&nbsp;评论</h3>
                 </div>
                 <div class="panel-body">
                     {% if "user" not in session %}
@@ -120,7 +126,7 @@
                         </div>
                     {% endif %}
                     <ol class="breadcrumb" style="margin-top:6px;">
-                        <li>全部评论({{ movie.commentnum }})</li>
+                        <li>全部评论({{ movie.comment_num }})</li>
                     </ol>
                     {% for msg in get_flashed_messages(category_filter=["ok"]) %}
                         <div class="alert alert-success alert-dismissible">
@@ -132,20 +138,12 @@
                         <form role="form" style="margin-bottom:6px;" method="post">
                             <div class="form-group">
                                 <div>
-                                    <label for="input_content">{{ form.content.label }}</label>
-                                    <!--<textarea id="input_content"></textarea>-->
-                                    {{ form.content }}
+                                    <label for="input_content">内容</label>
+                                    <textarea id="input_content"></textarea>
                                 </div>
-                                {% for err in form.content.errors %}
-                                    <div class="col-md-12">
-                                        <font style="color:red">{{ err }}</font>
-                                    </div>
-                                {% endfor %}
+                                <p style="color:red;font-weight: bold">{{ err }}</p>
+                                <button class="btn btn-success" id="btn-sub"><span class="glyphicon glyphicon-ok"></span>&nbsp;提交评论</button>
                             </div>
-                            <!--<a class="btn btn-success" id="btn-sub"><span class="glyphicon glyphicon-edit"></span>&nbsp;提交评论</a>-->
-                            {{ form.csrf_token }}
-                            &nbsp;{{ form.submit }}
-                            <a class="btn btn-danger" id="btn-col"><span class="glyphicon glyphicon-heart"></span>&nbsp;收藏电影</a>
                         </form>
                     {% endif %}
                     <ul class="commentList">
@@ -171,120 +169,10 @@
                                 </div>
                             </div>
                         </li>
-                        <li class="item cl">
-                            <a href="user.html">
-                                <i class="avatar size-L radius">
-                                    <img alt="50x50" src="holder.js/50x50" class="img-circle"
-                                         style="border:1px solid #abcdef;">
-                                </i>
-                            </a>
-                            <div class="comment-main">
-                                <header class="comment-header">
-                                    <div class="comment-meta">
-                                        <a class="comment-author" href="user.html">xiaoli</a>
-                                        评论于
-                                        <time title="2016-12-07 09:12:51" datetime="2016-12-07 09:12:51">2017-03-01
-                                            09:12:51
-                                        </time>
-                                    </div>
-                                </header>
-                                <div class="comment-body">
-                                    <p>这电影真好看！</p>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="item cl">
-                            <a href="user.html">
-                                <i class="avatar size-L radius">
-                                    <img alt="50x50" src="holder.js/50x50" class="img-circle"
-                                         style="border:1px solid #abcdef;">
-                                </i>
-                            </a>
-                            <div class="comment-main">
-                                <header class="comment-header">
-                                    <div class="comment-meta">
-                                        <a class="comment-author" href="user.html">xiaoli</a>
-                                        评论于
-                                        <time title="2016-12-07 09:12:51" datetime="2016-12-07 09:12:51">2017-03-01
-                                            09:12:51
-                                        </time>
-                                    </div>
-                                </header>
-                                <div class="comment-body">
-                                    <p>这电影真好看！</p>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="item cl">
-                            <a href="user.html">
-                                <i class="avatar size-L radius">
-                                    <img alt="50x50" src="holder.js/50x50" class="img-circle"
-                                         style="border:1px solid #abcdef;">
-                                </i>
-                            </a>
-                            <div class="comment-main">
-                                <header class="comment-header">
-                                    <div class="comment-meta">
-                                        <a class="comment-author" href="user.html">xiaoli</a>
-                                        评论于
-                                        <time title="2016-12-07 09:12:51" datetime="2016-12-07 09:12:51">2017-03-01
-                                            09:12:51
-                                        </time>
-                                    </div>
-                                </header>
-                                <div class="comment-body">
-                                    <p>这电影真好看！</p>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="item cl">
-                            <a href="user.html">
-                                <i class="avatar size-L radius">
-                                    <img alt="50x50" src="holder.js/50x50" class="img-circle"
-                                         style="border:1px solid #abcdef;">
-                                </i>
-                            </a>
-                            <div class="comment-main">
-                                <header class="comment-header">
-                                    <div class="comment-meta">
-                                        <a class="comment-author" href="user.html">xiaoli</a>
-                                        评论于
-                                        <time title="2016-12-07 09:12:51" datetime="2016-12-07 09:12:51">2017-03-01
-                                            09:12:51
-                                        </time>
-                                    </div>
-                                </header>
-                                <div class="comment-body">
-                                    <p>这电影真好看！</p>
-                                </div>
-                            </div>
-                        </li>
                     </ul>
                     <div class="col-md-12 text-center">
                         <nav aria-label="Page navigation">
-                            <ul class="pagination">
-                                <li>
-                                    <a href="#" aria-label="First">
-                                        <span aria-hidden="true">首页</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" aria-label="Previous">
-                                        <span aria-hidden="true">上一页</span>
-                                    </a>
-                                </li>
-                                <li><a href="#">1&nbsp;/&nbsp;10</a></li>
-                                <li>
-                                    <a href="#" aria-label="Next">
-                                        <span aria-hidden="true">下一页</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" aria-label="Last">
-                                        <span aria-hidden="true">尾页</span>
-                                    </a>
-                                </li>
-                            </ul>
+
                         </nav>
                     </div>
                 </div>
@@ -302,12 +190,11 @@
             mobileCkControls: true,//是否在移动端（包括ios）环境中显示控制栏
             mobileAutoFull: true,//在移动端播放后是否按系统设置的全屏播放
             h5container: '#videoplayer',//h5环境中使用自定义容器
-            autoplay: true,
+            //autoplay: true,
             //loop: true, //播放结束是否循环播放
             volume: 0.5,
             //video: '{{ url_for('static',filename='admin/uploads/movies/')+movie.url }}'//视频地址
             {#video: [#}
-            {#    ["{{ url_for('static',filename='admin/uploads/movies/')+movie.url }}", 'video/mp4', '标清', 1],#}
             {#    ["{{ url_for('static',filename='admin/uploads/movies/')+movie.url }}", 'video/mp4', '高清', 0],#}
             {#    ["{{ url_for('static',filename='admin/uploads/movies/')+movie.url }}", 'video/mp4', '蓝光', 2],#}
             {#]#}
@@ -388,7 +275,7 @@
             };
             var danmuAnimate = player.animate(obj);
             DArr.push(danmuAnimate);
-            console.log(danmu);
+            //console.log(danmu);
             YArr.push(danmu);
         }
 
@@ -424,29 +311,19 @@
             }
         }
     </script>
-    <script type="text/javascript" src="{{ url_for('static',filename='ueditor/ueditor.config.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static',filename='ueditor/ueditor.all.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static',filename='ueditor/lang/zh-cn/zh-cn.js') }}"></script>
-    <script>
-        SyntaxHighlighter.all();
-    </script>
-    <script src="{{ url_for('static',filename='home/jwplayer/src/js/jwplayer.js') }}"></script>
     <script>
         var ue = UE.getEditor('input_content', {
             toolbars: [
-                ['fullscreen', 'emotion', 'preview', 'link']
+                ['emotion',]
             ],
             initialFrameWidth: "100%",
             initialFrameHeight: "100",
         });
     </script>
-
     <script>
         $(document).ready(function () {
             new WOW().init();
-            $("img.lazy").lazyload({
-                effect: "fadeIn"
-            });
+
         });
     </script>
 {% endblock %}
