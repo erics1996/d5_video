@@ -69,13 +69,13 @@
                 <!--</li>-->
                 {% if "user" in session %}
                     <li>
-                        <a class="curlink" href="{{ url_for('home.logout') }}"><span
+                        <a onclick="return confirm('确定退出登录？')" class="curlink" href="{{ url_for('home.logout') }}"><span
                                 class="glyphicon glyphicon-log-out"></span>&nbsp;退出</a>
                     </li>
-                    <li>
-                        <a class="curlink" href="{{ url_for('home.user') }}"><span
-                                class="glyphicon glyphicon-stats" style="color: green;"></span>&nbsp;已登录</a>
-                    </li>
+                    {#                    <li>#}
+                    {#                        <a class="curlink" href="javascript:;"><span#}
+                    {#                                class="glyphicon glyphicon-stats" style="color: green;"></span>&nbsp;已登录</a>#}
+                    {#                    </li>#}
                     <li>
                         <a href="{{ url_for('home.user') }}">
                             <i class="avatar size-L radius">
@@ -137,8 +137,8 @@
         new WOW().init();
         $("#search").click(function () {
                 var key = $("#key_movie").val();
-                {#location.href = "{{url_for('home.search',page=1)}}?key=" + key;#}
-                window.open("{{url_for('home.search',page=1)}}?key=" + key);
+                location.href = "{{url_for('home.search',page=1)}}?key=" + key;
+                {#window.open("{{url_for('home.search',page=1)}}?key=" + key);#}
             }
         )
     })
