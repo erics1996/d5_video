@@ -6,7 +6,7 @@ from app import db
 
 
 # 添加标签
-@admin.route("/admin/tag/add/", methods=["GET", "POST"])
+@admin.route("/tag/add/", methods=["GET", "POST"])
 def tag_add():
     form = TagForm()
     if form.validate_on_submit():
@@ -25,7 +25,7 @@ def tag_add():
 
 
 # 标签列表
-@admin.route("/admin/tag/list/<int:page>", methods=["GET"])
+@admin.route("/tag/list/<int:page>", methods=["GET"])
 def tag_list(page=None):
     if page is None:
         page = 1
@@ -36,12 +36,12 @@ def tag_list(page=None):
 
 
 # 编辑标签
-@admin.route("/admin/tag/edit/<int:id>", methods=["GET", "POST"])
+@admin.route("/tag/edit/<int:id>", methods=["GET", "POST"])
 def tag_edit(id=None):
     return ''
 
 
 # 删除标签
-@admin.route("/admin/tag/del/<int:id>", methods=["GET"])
+@admin.route("/tag/del/<int:id>", methods=["GET"])
 def tag_del(id=None):
     return ''
