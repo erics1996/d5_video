@@ -1,6 +1,5 @@
 {% extends "home/home.html" %}
 {% import "home/ui/search_page.html" as pg %}
-
 {% block content %}
     <div class="row">
         <div class="col-md-12">
@@ -14,7 +13,7 @@
                     <div class="media-left">
                         <a href="">
                             <img class="media-object" style="width:131px;height:83px;"
-                                 src="{{ url_for('static',filename='uploads/'+v.logo) }}" alt="{{ v.title }}">
+                                 src="{{ url_for('static',filename='admin/uploads/movielogos/'+v.logo) }}" alt="{{ v.title }}">
                         </a>
                     </div>
                     <div class="media-body">
