@@ -1,7 +1,7 @@
 from app.home import home
 from flask import render_template, flash, request, redirect, url_for, session, jsonify
 from ..forms.user_form import RegisterForm, LoginForm, UserDetailForm, PwdForm
-from ...models import User, UserLog, Comment
+from ...models import User, UserLog, Comment, Movie
 from app import db
 from werkzeug.security import generate_password_hash
 import uuid
@@ -168,7 +168,7 @@ def loginlog(page=None):
 def comment_add():
     ret = {'status': True, 'msg': None}
     try:
-        all = request.form  # ImmutableMultiDict([('comment_content', '你好'), ('user_id', '1'), ('movie_id', '3')])
+        # all = request.form  # ImmutableMultiDict([('comment_content', '你好'), ('user_id', '1'), ('movie_id', '3')])
         comment_content = request.form['comment_content']
         # print(comment_content, type(comment_content))  # 你好 <class 'str'>
         user_id = request.form['user_id']  # <class 'str'> 数据库是int，这里不使用int也可以
@@ -185,4 +185,37 @@ def comment_add():
         ret['status'] = False
         ret['msg'] = str(e)
         # ret['msg'] = '删除失败'
+    return jsonify(ret)
+
+
+@home.route('/movie/comment/list/', methods=['GET'])
+def show_movie_comment():
+    ret = {'status': True, 'msg': None}
+    try:
+        movie_id = request.args.get('movie_id')  # <class 'str'>
+        movie_comment_obj_list = Comment.query.join(
+            User
+        ).filter(
+            User.id == Comment.user_id
+        ).all()
+        ret['user'] = {'face': [], 'movie_comment': []}
+        for obj in movie_comment_obj_list:
+            # print(obj.user.face)  # 202007162204485797a85fb89d4360a3e1fd63660105c8.jpg
+            # print(obj.content)  # 太好看了！
+            ret['user']['face'].append(obj.user.face)
+            ret['user']['movie_comment'].append(obj.content)
+
+    except Exception as e:
+        print(e)  # Entity '<class 'app.models.User'>' has no property 'movie_id'
+        ret['status'] = False
+        ret['msg'] = str(e)  # Entity '<class 'app.models.User'>' has no property 'movie_id'
+        ret['msg'] = '获取评论列表失败！'
+
+    import json
+    print(json.dumps(
+        ret))  # {"status": true, "msg": null, "user": {"face": "202007162204485797a85fb89d4360a3e1fd63660105c8.jpg", "comment_content": "\u592a\u597d\u770b\u4e86\uff01"}}
+    print(jsonify(ret))  # <Response 151 bytes [200 OK]>
+    jsonify(ret)
+    print(
+        ret)  # {'status': True, 'msg': None, 'user': {'face': '202007162204485797a85fb89d4360a3e1fd63660105c8.jpg', 'comment_content': '太好看了！'}}
     return jsonify(ret)

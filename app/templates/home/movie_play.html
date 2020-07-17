@@ -148,8 +148,9 @@
                         <li class="item cl">
                             <a href="user.html">
                                 <i class="avatar size-L radius">
-                                    <img alt="50x50" src="holder.js/50x50" class="img-circle"
-                                         style="border:1px solid #abcdef;">
+                                    <img id="user_face" alt="50x50" data-src="holder.js/50x50" class="img-circle"
+                                         style="border:1px solid #abcdef;"
+                                         src="">
                                 </i>
                             </a>
                             <div class="comment-main">
@@ -320,7 +321,6 @@
                 var comment_content = $('#comment_content').val();
                 var user_id = {{ session.get('user_id') }};
                 var movie_id = {{ movie.id }};
-                //alert(comment_content);
                 $.ajax({
                     url: '/comment/add/',
                     type: 'post',
@@ -345,7 +345,25 @@
         }
 
         function show_comments() {
+            var movie_id = {{ movie.id }};
+            $.ajax({
+                url: '/movie/comment/list/',
+                type: 'GET',
+                data: {
+                    'movie_id': movie_id,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.status) {
+                        alert(length(data.user.face))
+                        face = "static/home/uploads/users/" + data.user.face
 
+                        alert(face)
+                    } else {
+                        alert(data.msg)
+                    }
+                }
+            })
         }
 
 

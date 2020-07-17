@@ -56,13 +56,13 @@
                 <li>
                     <a class="curlink" href="{{ url_for('home.index') }}"><span class="glyphicon glyphicon-film"></span>&nbsp;电影</a>
                 </li>
-                {#                <li>#}
-                {#                    <a class="curlink" href="{{ url_for('home.index') }}"><span#}
-                {#                            class="glyphicon glyphicon-music"></span>&nbsp;音乐MV</a>#}
-                {#                </li>#}
-                {#                <li>#}
-                {#                    <a class="curlink" href="{{ url_for('home.index') }}"><span class="glyphicon glyphicon-fire"></span>&nbsp;动漫</a>#}
-                {#                </li>#}
+                <li>
+                    <a class="curlink" href="{{ url_for('home.index') }}"><span
+                            class="glyphicon glyphicon-music"></span>&nbsp;音乐MV</a>
+                </li>
+                <li>
+                    <a class="curlink" href="{{ url_for('home.index') }}"><span class="glyphicon glyphicon-fire"></span>&nbsp;动漫</a>
+                </li>
                 <!--<li>-->
                 <!--<a class="curlink" href="{{ url_for('home.login') }}"><span-->
                 <!--class="glyphicon glyphicon-log-in"></span>&nbsp;登录</a>-->
@@ -81,7 +81,7 @@
                             <i class="avatar size-L radius">
                                 <img alt="头像"
                                      src="{{ url_for('static',filename='home/uploads/users/'+session.get('face')) }}"
-                                     class=""
+                                     class="img-circle"
                                      height="30px" width="30px">
                             </i>
                         </a>
