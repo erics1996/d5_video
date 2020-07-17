@@ -2,6 +2,7 @@ from app.home import home
 from flask import render_template, request
 from ... import models
 from app import db
+from .user import user_login_decorator
 
 
 @home.route("/search/<int:page>/")

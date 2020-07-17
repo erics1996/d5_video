@@ -84,7 +84,7 @@
                         </tr>
                         <tr>
                             <td style="width:36%;color:#ccc;font-weight:bold;">
-                                <span class="glyphicon glyphicon-play"></span>&nbsp;播放数量
+                                <span class="glyphicon glyphicon-play"></span>&nbsp;播放次数
                             </td>
                             <td style="font-size: 13px">{{ movie.play_num }}</td>
                         </tr>
@@ -122,10 +122,13 @@
                                          class="text-info">登录</a>，才可参与评论！</strong>
                         </div>
                     {% endif %}
-
                     <div class="alert alert-success alert-dismissible hide" id="ok" style="margin-bottom: 10px">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                        <span id="comment_success"></span>
+                        <span id="comment_success" style="font-weight: bold"></span>
+                    </div>
+                    <div class="alert alert-danger alert-dismissible hide" style="margin-bottom: 10px">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <span style="font-weight: bold;"></span>
                     </div>
                     {% if "user" in session %}
                         <form role="form" style="margin-bottom:6px;">
@@ -134,7 +137,7 @@
                                     <label for="comment_content">内容</label>
                                     <textarea id="comment_content" class="form-control" rows="3"></textarea>
                                 </div>
-                                <p style="color:red;font-weight: bold">{{ err }}</p>
+                                <p style="color:red;font-weight: bold" id="comment_error"></p>
                                 <a class="btn btn-success" id="commit_content">
                                     <span class="glyphicon glyphicon-ok"></span>&nbsp;提交评论
                                 </a>
@@ -144,8 +147,9 @@
                     <ol class="breadcrumb" style="margin-top:6px;">
                         <li>全部评论({{ movie.comment_num }})</li>
                     </ol>
-                    <ul class="commentList">
-                        <li class="item cl">
+                    <ul class="commentList" id="commentList">
+                        <!--
+                        <li class="item cl" id="comment_li">
                             <a href="user.html">
                                 <i class="avatar size-L radius">
                                     <img id="user_face" alt="50x50" data-src="holder.js/50x50" class="img-circle"
@@ -164,14 +168,31 @@
                                     </div>
                                 </header>
                                 <div class="comment-body">
-                                    <p>这电影真好看！</p>
+                                    <p id="comment_p">这电影真好看！</p>
                                 </div>
                             </div>
                         </li>
+                        -->
                     </ul>
                     <div class="col-md-12 text-center">
                         <nav aria-label="Page navigation">
-
+                            <ul class="pagination">
+                                <li>
+                                    <a href="#" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li class="active"><a href="#">1</a></li>
+                                <li><a href="#">2</a></li>
+                                <li><a href="#">3</a></li>
+                                <li><a href="#">4</a></li>
+                                <li><a href="#">5</a></li>
+                                <li>
+                                    <a href="#" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
                         </nav>
                     </div>
                 </div>
@@ -318,6 +339,7 @@
 
         function commit_comment() {
             $('#commit_content').click(function () {
+                $('#comment_error').text('');
                 var comment_content = $('#comment_content').val();
                 var user_id = {{ session.get('user_id') }};
                 var movie_id = {{ movie.id }};
@@ -334,9 +356,14 @@
                         if (data.status) {
                             $('#ok').removeClass('hide');
                             $('#comment_success').text('发布成功！');
+                            show_comments();
                         } else {
                             //$('#err').text(data);
-                            $('#comment_success').text(data.msg);
+                            //$('#error').removeClass('hide');
+                            $('#comment_error').text(data.msg);
+                            setTimeout(function () {
+                                $('#comment_error').text('');
+                            }, 2000);
                             console.log(data.msg);
                         }
                     }
@@ -347,7 +374,7 @@
         function show_comments() {
             var movie_id = {{ movie.id }};
             $.ajax({
-                url: '/movie/comment/list/',
+                url: '/movie/comment/list/1',
                 type: 'GET',
                 data: {
                     'movie_id': movie_id,
@@ -355,17 +382,20 @@
                 dataType: 'json',
                 success: function (data) {
                     if (data.status) {
-                        alert(length(data.user.face))
-                        face = "static/home/uploads/users/" + data.user.face
-
-                        alert(face)
+                        //face = "static/home/uploads/users/" + data.user.face
+                        //alert(data.user.length)
+                        //遍历数组和列表
+                        $('#commentList').html('');
+                        $.each(data.user, function (i, row) {
+                            //console.log(row.face, row.movie_comment);
+                            var comment_li = "<li class=\"item cl\" id=\"comment_li\">\n" + "<a href=\"user.html\">\n" + "<i class=\"avatar size-L radius\">\n" + "<img  id=\"user_face\" alt=\"50x50\" data-src=\"holder.js/50x50\" class=\"img-circle\"\n" + "style=\"border:1px solid #abcdef;\"\n" + "src={{ url_for('static',filename='home/uploads/users/') }}" + row.face + " width=50px height=50px>\n" + "</i>" + "</a>" + "<div class=\"comment-main\">\n" + "<header class=\"comment-header\">\n" + "<div class=\"comment-meta\">\n" + "<a class=\"comment-author\" href=\"user.html\">" + row.username + "</a>\n" + "评论于\n" + "<time title=\"\" datetime=\"2016-12-07 09:12:51\">" + row.add_time + "\n" + "</time>\n" + "</div>\n" + "</header>\n" + "<div class=\"comment-body\">\n" + "<p id=\"comment_p\">" + row.movie_comment + "</p>\n" + "</div>\n" + "</div>\n" + "</li>"
+                            $('#commentList').append(comment_li);
+                        })
                     } else {
                         alert(data.msg)
                     }
                 }
             })
         }
-
-
     </script>
 {% endblock %}
