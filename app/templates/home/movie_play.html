@@ -6,9 +6,6 @@
             padding-left: 3px;
         }
     </style>
-    <script type="text/javascript" src="{{ url_for('static',filename='ueditor/ueditor.config.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static',filename='ueditor/ueditor.all.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static',filename='ueditor/lang/zh-cn/zh-cn.js') }}"></script>
 {% endblock %}
 {% block content %}
     <div class="row">
@@ -33,7 +30,7 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="panel panel-danger">
+            <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title" style=""><span class="glyphicon glyphicon-facetime-video"></span>&nbsp;电影介绍
                     </h3>
@@ -66,7 +63,7 @@
                         </tr>
                         <tr>
                             <td style="color:#ccc;font-weight:bold;">
-                                <span class="glyphicon glyphicon-star"></span>&nbsp;星级
+                                <span class="glyphicon glyphicon-star"></span>&nbsp;评分
                             </td>
                             <td>
                                 <div>
@@ -110,7 +107,7 @@
             </div>
         </div>
         <div class="col-md-12" style="margin-top:6px;">
-            <div class="panel panel-danger">
+            <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title"><span class="glyphicon glyphicon-comment"></span>&nbsp;评论</h3>
                 </div>
@@ -125,29 +122,28 @@
                                          class="text-info">登录</a>，才可参与评论！</strong>
                         </div>
                     {% endif %}
-                    <ol class="breadcrumb" style="margin-top:6px;">
-                        <li>全部评论({{ movie.comment_num }})</li>
-                    </ol>
-                    {% for msg in get_flashed_messages(category_filter=["ok"]) %}
-                        <div class="alert alert-success alert-dismissible">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                            {{ msg }}
-                        </div>
-                    {% endfor %}
+
+                    <div class="alert alert-success alert-dismissible hide" id="ok" style="margin-bottom: 10px">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <span id="comment_success"></span>
+                    </div>
                     {% if "user" in session %}
-                        <form role="form" style="margin-bottom:6px;" method="post">
+                        <form role="form" style="margin-bottom:6px;">
                             <div class="form-group">
                                 <div>
-                                    <label for="input_content">内容</label>
-                                    <textarea id="input_content"></textarea>
+                                    <label for="comment_content">内容</label>
+                                    <textarea id="comment_content" class="form-control" rows="3"></textarea>
                                 </div>
                                 <p style="color:red;font-weight: bold">{{ err }}</p>
-                                <button class="btn btn-success" id="btn-sub"><span
-                                        class="glyphicon glyphicon-ok"></span>&nbsp;提交评论
-                                </button>
+                                <a class="btn btn-success" id="commit_content">
+                                    <span class="glyphicon glyphicon-ok"></span>&nbsp;提交评论
+                                </a>
                             </div>
                         </form>
                     {% endif %}
+                    <ol class="breadcrumb" style="margin-top:6px;">
+                        <li>全部评论({{ movie.comment_num }})</li>
+                    </ol>
                     <ul class="commentList">
                         <li class="item cl">
                             <a href="user.html">
@@ -314,18 +310,44 @@
         }
     </script>
     <script>
-        var ue = UE.getEditor('input_content', {
-            toolbars: [
-                ['emotion',]
-            ],
-            initialFrameWidth: "100%",
-            initialFrameHeight: "100",
-        });
-    </script>
-    <script>
-        $(document).ready(function () {
-            new WOW().init();
+        $(function () {
+            commit_comment();
+            show_comments();
+        })
 
-        });
+        function commit_comment() {
+            $('#commit_content').click(function () {
+                var comment_content = $('#comment_content').val();
+                var user_id = {{ session.get('user_id') }};
+                var movie_id = {{ movie.id }};
+                //alert(comment_content);
+                $.ajax({
+                    url: '/comment/add/',
+                    type: 'post',
+                    dataType: 'json',
+                    data: {
+                        'comment_content': comment_content,
+                        'user_id': user_id,
+                        'movie_id': movie_id,
+                    },
+                    success: function (data) {
+                        if (data.status) {
+                            $('#ok').removeClass('hide');
+                            $('#comment_success').text('发布成功！');
+                        } else {
+                            //$('#err').text(data);
+                            $('#comment_success').text(data.msg);
+                            console.log(data.msg);
+                        }
+                    }
+                })
+            })
+        }
+
+        function show_comments() {
+
+        }
+
+
     </script>
 {% endblock %}
