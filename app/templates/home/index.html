@@ -101,35 +101,32 @@
                     </table>
                 </div>
                 <div class="row">
-                    {% for i in range(0,6) %}
-                        <div class="col-sm-6 col-md-4">
-                            <div class="thumbnail">
-                                <img data-src="holder.js/100%x200" alt="100%x200"
-                                     src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMzc0IiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDM3NCAyMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjwhLS0KU291cmNlIFVSTDogaG9sZGVyLmpzLzEwMCV4MjAwCkNyZWF0ZWQgd2l0aCBIb2xkZXIuanMgMi42LjAuCkxlYXJuIG1vcmUgYXQgaHR0cDovL2hvbGRlcmpzLmNvbQooYykgMjAxMi0yMDE1IEl2YW4gTWFsb3BpbnNreSAtIGh0dHA6Ly9pbXNreS5jbwotLT48ZGVmcz48c3R5bGUgdHlwZT0idGV4dC9jc3MiPjwhW0NEQVRBWyNob2xkZXJfMTczNTkwYWFjZGUgdGV4dCB7IGZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxOXB0IH0gXV0+PC9zdHlsZT48L2RlZnM+PGcgaWQ9ImhvbGRlcl8xNzM1OTBhYWNkZSI+PHJlY3Qgd2lkdGg9IjM3NCIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSIxMzcuNjg3NSIgeT0iMTA4LjUwMzEyNSI+Mzc0eDIwMDwvdGV4dD48L2c+PC9nPjwvc3ZnPg=="
-                                     data-holder-rendered="true"
-                                     style="height: 200px; width: 100%; display: block;">
-                                <div class="caption">
-                                    <h5 style="font-weight: bold">我的天才女友第二季-02集</h5>
-                                    <p style="font-size: 13px">
-                                        本剧改编自小说家埃莱娜·费兰特的“那不勒斯四部曲”，讲述了两个女主人公莉拉和埃莱娜的一生。本剧改编自小说家埃莱娜·费兰特的“那不勒斯四部曲”
-                                    </p>
-                                    <p>
-                                        <a href="#" class="btn btn-primary" role="button">
-                                            <span class="glyphicon glyphicon-play"></span>
-                                            <span>播放</span>
-                                        </a>
-                                        <a href="#" class="btn btn-danger" role="button"
-                                           style="">
-                                            <span class="glyphicon glyphicon-heart"></span>&nbsp;
-                                            <span>收藏</span></a>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
+                    <div id="container"></div>
                 </div>
             </div>
         </div>
     </section>
     <!--电影列表-->
+{% endblock %}
+{% block js %}
+    <script>
+        $(function () {
+            get_movie_list();
+        })
+
+        function get_movie_list() {
+            $.ajax({
+                url: '/api/movie/list/',
+                type: 'GET',
+                datatype: 'json',
+                //data: {},
+                success: function (args) {
+                    $.each(args.movies, function (i, row) {
+                        var movies_items = "<div class=\"col-sm-6 col-md-3\"><div class=\"thumbnail\">" + "<img data-src=\"holder.js/100%x200\" alt=\"100%x200\"" + "src=\"" + "/static/admin/uploads/movielogos/" + row.logo + "\"" + "data-holder-rendered=\"true\"" + "style=\"height: 200px; width: 100%; display: block;\">" + "<div class=\"caption\">" + "<h5 style=\"font-weight: bold\">" + row.title + "</h5>" + "<p style=\"font-size: 13px\">" + "" + row.info + "" + "</p>" + "<p>" + "<a href=\"/play/" + row.id + "/\" class=\"btn btn-primary\" role=\"button\">" + "<span class=\"glyphicon glyphicon-play\"></span>" + "<span>播放</span>" + "</a>" + "<a href=\"#\" class=\"btn btn-danger\" role=\"button\"" + "style=\"\">" + "<span class=\"glyphicon glyphicon-heart\"></span>&nbsp;" + "<span>收藏</span></a>" + "</p>" + "</div>" + "</div></div>"
+                        $('#container').append(movies_items);
+                    })
+                }
+            })
+        }
+    </script>
 {% endblock %}
