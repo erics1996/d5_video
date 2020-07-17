@@ -1,7 +1,7 @@
 from app.home import home
-from flask import render_template, flash, request, redirect, url_for, session
+from flask import render_template, flash, request, redirect, url_for, session, jsonify
 from ..forms.user_form import RegisterForm, LoginForm, UserDetailForm, PwdForm
-from ...models import User, UserLog
+from ...models import User, UserLog, Comment
 from app import db
 from werkzeug.security import generate_password_hash
 import uuid
@@ -162,3 +162,27 @@ def loginlog(page=None):
         user_id=session.get('user_id')
     ).paginate(page=page, per_page=10)
     return render_template('home/loginlog.html', page_data=page_data)
+
+
+@home.route('/comment/add/', methods=['POST'])
+def comment_add():
+    ret = {'status': True, 'msg': None}
+    try:
+        all = request.form  # ImmutableMultiDict([('comment_content', '你好'), ('user_id', '1'), ('movie_id', '3')])
+        comment_content = request.form['comment_content']
+        # print(comment_content, type(comment_content))  # 你好 <class 'str'>
+        user_id = request.form['user_id']  # <class 'str'> 数据库是int，这里不使用int也可以
+        movie_id = request.form['movie_id']  # <class 'str'>
+        comment = Comment(
+            content=comment_content,
+            user_id=user_id,
+            movie_id=movie_id
+        )
+        db.session.add(comment)
+        db.session.commit()
+        db.session.remove()
+    except Exception as e:
+        ret['status'] = False
+        ret['msg'] = str(e)
+        # ret['msg'] = '删除失败'
+    return jsonify(ret)
