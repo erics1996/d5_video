@@ -17,7 +17,8 @@ def user_list(page=None):
 def user_loginlog_list(page):
     if not page:
         page = 1
-    page_data = models.UserLog.query.order_by(models.UserLog.add_time.desc()).paginate(page=page, per_page=16)
+    page_data = models.UserLog.query.order_by(models.UserLog.add_time.desc()).paginate(page=page, per_page=10)
+    # print(page_data.items)#[<UserLog 60>, <UserLog 59>, <UserLog 58>, <UserLog 57>, <UserLog 56>, <UserLog 55>, <UserLog 54>, <UserLog 53>, <UserLog 52>, <UserLog 51>]
     return render_template('admin/user_loginlog_list.html', page_data=page_data)
 
 

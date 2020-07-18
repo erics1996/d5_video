@@ -58,4 +58,5 @@ def movie_list(page=None):
     page_data = Movie.query.join(Tag).filter(
         Movie.tag_id == Tag.id
     ).order_by(Movie.add_time.desc()).paginate(page=page, per_page=10)
+    # print(page_data.items)
     return render_template("admin/movie_list.html", page_data=page_data)
