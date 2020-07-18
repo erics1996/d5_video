@@ -17,7 +17,7 @@
                 <div class="form-group">
                     <div class="input-group">
                         {#<div class="input-group-addon">$</div>#}
-                        <input type="text" class="form-control" id="bulletChat" placeholder="请文明用语" value="可以发射弹幕了啊~~">
+                        <input type="text" class="form-control" id="bulletChat" placeholder="请文明用语！" value="">
                         {% if session.get('user') %}
                             <div class="input-group-addon btn" style="background: #0682f5;color: white;"
                                  onclick="newDanmu()"><span class="glyphicon glyphicon-send"></span>发送弹幕
@@ -42,7 +42,7 @@
         <div class="col-md-3">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title" style=""><span class="glyphicon glyphicon-facetime-video"></span>&nbsp;电影介绍
+                    <h3 class="panel-title" style=""><span class="glyphicon glyphicon-facetime-video"></span>&nbsp;影片介绍
                     </h3>
                 </div>
                 <div class="panel-body" style="height:453px;overflow:scroll;padding: 0">
@@ -53,12 +53,14 @@
                             </td>
                             <td style="font-size: 13px">{{ movie.title }}</td>
                         </tr>
-                        <tr>
-                            <td style="color:#ccc;font-weight:bold;">
-                                <span class="glyphicon glyphicon-tag"></span>&nbsp;标签
-                            </td>
-                            <td style="font-size: 13px"></td>
-                        </tr>
+                        <!--
+                            <tr>
+                                <td style="color:#ccc;font-weight:bold;">
+                                    <span class="glyphicon glyphicon-tag"></span>&nbsp;标签
+                                </td>
+                                <td style="font-size: 13px"></td>
+                            </tr>
+                        -->
                         <tr>
                             <td style="color:#ccc;font-weight:bold;">
                                 <span class="glyphicon glyphicon-tag"></span>&nbsp;分类
