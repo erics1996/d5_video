@@ -62,12 +62,17 @@ def login():
     return render_template('home/login.html', form=form)
 
 
-@home.route("/logout/")
+@home.route("/api/v1/user/logout/")
 def logout():
-    if session.get('user') and session.get('user_id'):
-        session.pop('user', None)
-        session.pop('user_id', None)
-    return redirect(url_for('home.login', next=request.url))
+    ret = {'status': 1, 'msg': None}
+    try:
+        if session.get('user') and session.get('user_id'):
+            session.pop('user', None)
+            session.pop('user_id', None)
+    except Exception as e:
+        ret['status'] = 0
+        ret['msg'] = '退出失败！'
+    return jsonify(ret)
 
 
 def user_login_decorator(func):

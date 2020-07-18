@@ -53,16 +53,18 @@
                 <div class="col-md-12 table-responsive" style="padding-left: 0;padding-right:0px">
                     <table class="table text-left table-bordered" id="movietags"
                            style="margin-bottom: 8px;margin-top: 8px">
+                        <!--
                         <tr>
-                            <td style="width:10%;">视频分类</td>
+                            <td style="width:10%;">电影分类</td>
                             <td style="width:90%;">
                                 <a href="" class="label label-info"><span class="glyphicon glyphicon-tag"></span>&nbsp;电影</a>
                                 <a href="" class="label label-default"><span class="glyphicon glyphicon-tag"></span>&nbsp;电视连续剧</a>
                                 <a href="" class="label label-danger"><span class="glyphicon glyphicon-tag"></span>&nbsp;音乐MV</a>
 
                         </tr>
+                        -->
                         <tr>
-                            <td style="width:10%;">视频标签</td>
+                            <td style="width:10%;">电影标签</td>
                             <td style="width:90%;">
                                 <a href="" class="label label-primary"><span class="glyphicon glyphicon-tag"></span>&nbsp;教育</a>
                                 <a href="" class="label label-primary"><span class="glyphicon glyphicon-tag"></span>&nbsp;正能量</a>
@@ -73,10 +75,9 @@
                                 <a href="" class="label label-danger"><span class="glyphicon glyphicon-tag"></span>&nbsp;旅行</a>
                                 <a href="" class="label label-primary"><span class="glyphicon glyphicon-tag"></span>&nbsp;体育</a>
                                 <a href="" class="label label-info"><span class="glyphicon glyphicon-tag"></span>&nbsp;美食</a>
-                                <a href="" class="label label-default"><span class="glyphicon glyphicon-tag"></span>&nbsp;纪实片</a>
                         </tr>
                         <tr>
-                            <td>视频评分</td>
+                            <td>电影评分</td>
                             <td>
                                 <a href="" class="label label-primary"><span class="glyphicon glyphicon-star"></span>&nbsp;</a>
                                 <a href="" class="label label-warning"><span
@@ -117,6 +118,7 @@
                                 </a>
                             </td>
                         </tr>
+                        <!--
                         <tr>
                             <td>热门程度</td>
                             <td>
@@ -128,6 +130,7 @@
                                 </a>
                             </td>
                         </tr>
+                        -->
                     </table>
                 </div>
                 <div class="row">
@@ -154,7 +157,7 @@
                 //data: {},
                 success: function (args) {
                     $.each(args.movies, function (i, row) {
-                        var movies_items = "<div class=\"col-sm-6 col-md-3\"><div class=\"thumbnail\">" + "<img class=\"lazy\" data-src=\"holder.js/100%x200\" alt=\"100%x200\"" + "data-original=\"" + "/static/admin/uploads/movielogos/" + row.logo + "\"" + "data-holder-rendered=\"true\"" + "style=\"height: 200px; width: 100%; display: block;\">" + "<div class=\"caption\">" + "<h5 style=\"font-weight: bold\">" + row.title + "</h5>" + "<p style=\"font-size: 13px\">" + "" + row.info + "" + "</p>" + "<p>" + "<a href=\"/play/" + row.id + "/\" class=\"btn btn-primary\" role=\"button\">" + "<span class=\"glyphicon glyphicon-play\"></span>" + "<span>播放</span>" + "</a>" + "<a href=\"#\" class=\"btn btn-danger\" role=\"button\"" + "style=\"\">" + "<span class=\"glyphicon glyphicon-heart\"></span>&nbsp;" + "<span>收藏</span></a>" + "</p>" + "</div>" + "</div></div>"
+                        var movies_items = "<div class=\"col-sm-6 col-md-3\"><div class=\"thumbnail\">" + "<img class=\"lazy\" data-src=\"holder.js/100%x200\" alt=\"100%x200\"" + "data-original=\"" + "/static/admin/uploads/movielogos/" + row.logo + "\"" + "data-holder-rendered=\"true\"" + "style=\"height: 200px; width: 100%; display: block;\">" + "<div class=\"caption\">" + "<h5 style=\"font-weight: bold\">" + row.title + "</h5>" + "<p style=\"font-size: 13px\">" + "" + row.info + "" + "</p>" + "<p>" + "<a href=\"/play/" + row.id + ".html\" class=\"btn btn-primary\" role=\"button\">" + "<span class=\"glyphicon glyphicon-play\"></span>" + "<span>播放</span>" + "</a>" + "<a href=\"#\" class=\"btn btn-danger\" role=\"button\"" + "style=\"\">" + "<span class=\"glyphicon glyphicon-heart\"></span>&nbsp;" + "<span>收藏</span></a>" + "</p>" + "</div>" + "</div></div>"
                         $('#container').append(movies_items);
                     });
                     $("img.lazy").lazyload({
