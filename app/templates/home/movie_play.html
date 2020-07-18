@@ -17,14 +17,24 @@
                 <div class="form-group">
                     <div class="input-group">
                         {#<div class="input-group-addon">$</div>#}
-                        <input type="text" class="form-control" id="bulletChat" placeholder="请文明用语" value="可以发射弹幕了啊~~">
-                        <div class="input-group-addon btn" style="background: #0682f5;color: white;"
-                             onclick="newDanmu('sdsd')"><span class="glyphicon glyphicon-send"></span>发射弹幕
-                        </div>
-
-                        <div class="input-group-addon btn" style="background: #d9534f;color: white;"
-                             onclick=""><span class="glyphicon glyphicon-heart"></span>收藏
-                        </div>
+                        <input type="text" class="form-control" id="bulletChat" placeholder="请文明用语！" value="">
+                        {% if session.get('user') %}
+                            <div class="input-group-addon btn" style="background: #0682f5;color: white;"
+                                 onclick="newDanmu()"><span class="glyphicon glyphicon-send"></span>发送弹幕
+                            </div>
+                            <div class="input-group-addon btn" style="background: #d9534f;color: white;"
+                                 onclick=""><span class="glyphicon glyphicon-heart"></span>收藏
+                            </div>
+                        {% else %}
+                            <div onclick="alert('请先登录才可以收藏！')" class="input-group-addon btn"
+                                 style="background: #0682f5;color: white;">
+                                <span class="glyphicon glyphicon-send"></span>发送弹幕
+                            </div>
+                            <div onclick="alert('请先登录才可以收藏！')" class="input-group-addon btn"
+                                 style="background: #d9534f;color: white;">
+                                <span class="glyphicon glyphicon-heart"></span>收藏
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -32,7 +42,7 @@
         <div class="col-md-3">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title" style=""><span class="glyphicon glyphicon-facetime-video"></span>&nbsp;电影介绍
+                    <h3 class="panel-title" style=""><span class="glyphicon glyphicon-facetime-video"></span>&nbsp;影片介绍
                     </h3>
                 </div>
                 <div class="panel-body" style="height:453px;overflow:scroll;padding: 0">
@@ -43,12 +53,14 @@
                             </td>
                             <td style="font-size: 13px">{{ movie.title }}</td>
                         </tr>
-                        <tr>
-                            <td style="color:#ccc;font-weight:bold;">
-                                <span class="glyphicon glyphicon-tag"></span>&nbsp;标签
-                            </td>
-                            <td style="font-size: 13px"></td>
-                        </tr>
+                        <!--
+                            <tr>
+                                <td style="color:#ccc;font-weight:bold;">
+                                    <span class="glyphicon glyphicon-tag"></span>&nbsp;标签
+                                </td>
+                                <td style="font-size: 13px"></td>
+                            </tr>
+                        -->
                         <tr>
                             <td style="color:#ccc;font-weight:bold;">
                                 <span class="glyphicon glyphicon-tag"></span>&nbsp;分类
@@ -248,7 +260,9 @@
             var danmuObj = {
                 list: [{
                     type: 'image', //定义元素类型：只有二种类型，image=使用图片，text=文本
-                    file: '{{ url_for('static',filename='home/uploads/users/'+session.get('face'))}}', //图片地址
+                    {% if session.get('face') %}
+                        file: '{{ url_for('static',filename='home/uploads/users/'+session.get('face'))}}', //图片地址
+                    {% endif %}
                     radius: 30, //图片圆角弧度
                     width: 30, //定义图片宽，必需要定义
                     height: 30, //定义图片高，必需要定义

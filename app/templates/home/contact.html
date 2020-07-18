@@ -1,0 +1,75 @@
+{% extends 'home/index.html' %}
+{% block css %}
+{% endblock %}
+{% block content %}
+    <div class="container" style="padding: 0">
+        <div class="row">
+            <div class="col-md-12" style="padding:5px;">
+                <ol class="breadcrumb" style="margin-bottom: 0;padding: 10px">
+                    <li><a href="{{ url_for('home.index') }}">首页</a></li>
+                    <li class="active">联系我们</li>
+                </ol>
+                <div class="col-md-3" style="padding: 0">
+                    <div class="panel panel-default" style="padding-bottom: 0">
+                        <!--                <div class="panel-heading">关于本站</div>-->
+                        <div class="panel-body">
+                            <ul class="list-group" style="margin-bottom: 0">
+                                <a href="{{ url_for('home.about_website') }}" class="list-group-item btn"
+                                   style="font-weight: bold;">
+                                    &nbsp;&nbsp;关于本站
+                                </a>
+                                <a href="{{ url_for('home.disclaimer') }}" class="list-group-item btn"
+                                   style="font-weight: bold;">
+                                    &nbsp;&nbsp;免责申明
+                                </a>
+                                <a href="{{ url_for('home.blueprint') }}" class="list-group-item btn"
+                                   style="font-weight: bold;">
+                                    &nbsp;&nbsp;本站蓝图
+                                </a>
+                                <a href="{{ url_for('home.contact') }}" class="list-group-item btn"
+                                   style="font-weight: bold;background: #3379b7;color: white">
+                                    &nbsp;&nbsp;联系我们
+                                </a>
+                                <!--                            <a href="" class="list-group-item btn"-->
+                                <!--                               style="font-weight: bold;">-->
+                                <!--                                &nbsp;&nbsp;留言板-->
+                                <!--                            </a>-->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9" style="padding-right: 0">
+                    <!--            <div class="panel panel-primary">-->
+                    <!--                <div class="panel-heading">-->
+                    <!--                    / 关于本站 / 关于运营-联系方式-->
+                    <!--                </div>-->
+                    <!--            </div>-->
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h5>
+                                <spqn class="glyphicon glyphicon-user"></spqn>
+                                WeChat：18512152005
+                            </h5>
+                            <h5>
+                                <spqn class="glyphicon glyphicon-user"></spqn>
+                                QQ：3330447288
+                            </h5>
+                            <h5>
+                                <span class="glyphicon glyphicon-envelope"></span>
+                                E-mail&nbsp;：thanlon@sina.com
+                            </h5>
+                            <h5>
+                                <spqn class="glyphicon glyphicon-link"></spqn>
+                                博客地址：<a href="https://blog.csdn.net/Thanlon"
+                                        target="_blank">https://blog.csdn.net/Thanlon</a>
+                            </h5>
+                        </div>
+                        {% for v in range(18) %}<br>{% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+{% endblock %}

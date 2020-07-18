@@ -21,7 +21,7 @@ def search(page=None):
     return render_template("home/search.html", page=page, key=key, page_data=page_data, movie_count=movie_count)
 
 
-@home.route("/play/<int:id>/", methods=["GET", "POST"])
+@home.route("/play/<int:id>.html", methods=["GET", "POST"])
 def play(id=None):
     movie = models.Movie.query.filter_by(id=id).first_or_404()
     movie.play_num += 1
