@@ -1,6 +1,18 @@
 {% extends "home/home.html" %}
 {% block css %}
     <link rel="stylesheet" href="{{ url_for('static',filename='home/css/user.css') }}/">
+    <style>
+        .list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
+            background-color: brown;
+            border: none;
+        }
+
+        .panel-default > .panel-heading {
+            color: #333;
+            background-color: #ccc;
+            border-color: #f5f5f5;
+        }
+    </style>
 {% endblock %}
 {% block content %}
     {% include "home/menu.html" %}
@@ -37,7 +49,7 @@
                             //console.log(row.movie_name)
                             //console.log(row.add_time)
                             //console.log(row.content)
-                            var comment = "<li class=\"item cl\">" + "<a>" + "<i class=\"avatar size-L radius\">" + "<img alt=\"50x50\" data-src=\"holder.js/50x50\"" + "src=\"" + "{{ url_for('static',filename='home/uploads/users/'+session.get('face')) }}" +"\"" + "class=\"img-circle\"" + "style=\"border:1px solid #abcdef;width:50px;\">" + "</i>" + "</a>" + "<div class=\"comment-main\">" + "<header class=\"comment-header\">" + "<div class=\"comment-meta\">" + "<a class=\"comment-author\" href=\"\">" + "{{ session.get('user') }}" + "</a>" + "<sapn></sapn>" + "评论于&nbsp;" + "<time title=\"\" datetime=\"2016-12-07 09:12:51\">" + row.add_time + "</time>" + "</div>" + "</header>" + "<div class=\"comment-body\">" + row.content + "</div>" + "</div>" + "</li>";
+                            var comment = "<li class=\"item cl\">" + "<a>" + "<i class=\"avatar size-L radius\">" + "<img alt=\"50x50\" data-src=\"holder.js/50x50\"" + "src=\"" + "{{ url_for('static',filename='home/uploads/users/'+session.get('face')) }}" + "\"" + "class=\"img-circle\"" + "style=\"border:1px solid #abcdef;width:50px;\">" + "</i>" + "</a>" + "<div class=\"comment-main\">" + "<header class=\"comment-header\">" + "<div class=\"comment-meta\">" + "<a class=\"comment-author\" href=\"\">" + "{{ session.get('user') }}" + "</a>" + "<sapn></sapn>" + "评论于&nbsp;" + "<time title=\"\" datetime=\"2016-12-07 09:12:51\">" + row.add_time + "</time>" + "</div>" + "</header>" + "<div class=\"comment-body\">" + row.content + "</div>" + "</div>" + "</li>";
                             $('#container_comments').append(comment)
                         })
                     }

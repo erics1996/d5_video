@@ -1,40 +1,61 @@
 {% extends "home/home.html" %}
+{% block css %}
+    <style>
+        .panel-primary {
+            border-color: brown;
+        }
+
+        .panel-primary > .panel-heading {
+            color: #fff;
+            background-color: brown;
+            border-color: white;
+        }
+
+        .btn-primary {
+            color: #fff;
+            background-color: brown;
+            border-color: white;
+        }
+    </style>
+{% endblock %}
 {% block content %}
-<div class="row" style="margin-top: 8px">
-    <div class="col-md-4 col-md-offset-4">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title"><span class="glyphicon glyphicon-log-in"></span>&nbsp;用户登录</h3>
-            </div>
-            <div class="panel-body">
-                <form role="form" method="post">
-                    <fieldset>
-                        {% for msg in get_flashed_messages(category_filter=["err"]) %}
-                        <p style="color:red;font-weight: bold">{{msg}}</p>
-                        {% endfor %}
-                        {% for msg in get_flashed_messages(category_filter=["ok"]) %}
-                        <p style="color:green">{{msg}}</p>
-                        {% endfor %}
-                        <div class="form-group">
-                            <label for="input_contact"><span class="glyphicon glyphicon-user"></span>{{form.name.label}}</label>
-                            {{form.name}}
-                        </div>
-                        <div class="col-md-12">
-                            <font style="color:red">{{ err }}</font>
-                        </div>
-                        <div class="form-group">
-                            <label for="input_password"><span class="glyphicon glyphicon-lock"></span>{{form.pwd.label}}</label>
-                            {{form.pwd}}
-                        </div>
-                        <div class="col-md-12">
-                            {{form.csrf_token}}
-                            {{form.submit}}
-                            <font style="color:red">{{ err }}</font>
-                        </div>
-                    </fieldset>
-                </form>
+    <div class="row" style="margin-top: 8px">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><span class="glyphicon glyphicon-log-in"></span>&nbsp;用户登录</h3>
+                </div>
+                <div class="panel-body">
+                    <form role="form" method="post">
+                        <fieldset>
+                            {% for msg in get_flashed_messages(category_filter=["err"]) %}
+                                <p style="color:red;font-weight: bold">{{ msg }}</p>
+                            {% endfor %}
+                            {% for msg in get_flashed_messages(category_filter=["ok"]) %}
+                                <p style="color:green">{{ msg }}</p>
+                            {% endfor %}
+                            <div class="form-group">
+                                <label for="input_contact"><span
+                                        class="glyphicon glyphicon-user"></span>{{ form.name.label }}</label>
+                                {{ form.name }}
+                            </div>
+                            <div class="col-md-12">
+                                <font style="color:red">{{ err }}</font>
+                            </div>
+                            <div class="form-group">
+                                <label for="input_password"><span
+                                        class="glyphicon glyphicon-lock"></span>{{ form.pwd.label }}</label>
+                                {{ form.pwd }}
+                            </div>
+                            <div class="col-md-12">
+                                {{ form.csrf_token }}
+                                {{ form.submit }}
+                                <font style="color:red">{{ err }}</font>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 {% endblock %}

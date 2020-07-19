@@ -1,42 +1,64 @@
 {% extends "home/home.html" %}
-{% import "home/ui/home_page.html" as pg%}
+{% import "home/ui/home_page.html" as pg %}
 {% block css %}
-<link rel="stylesheet" href="{{url_for('static',filename='home/css/user.css')}}/">
+    <link rel="stylesheet" href="{{ url_for('static',filename='home/css/user.css') }}/">
+    <style>
+        .list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
+            background-color: brown;
+            border: none;
+        }
+
+        .pagination > li > a, .pagination > li > span {
+            color: #a52e2a;
+            font-weight: bold;
+        }
+
+        .pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
+            background-color: #a52e2a;
+            border: none;
+        }
+
+        .panel-default > .panel-heading {
+            color: #333;
+            background-color: #ccc;
+            border-color: #f5f5f5;
+        }
+    </style>
 {% endblock %}
 {% block content %}
-{% include "home/menu.html" %}
-<div class="col-md-9">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title"><span class="glyphicon glyphicon-map-marker"></span>&nbsp;登录日志</h3>
-        </div>
-        <div class="panel-body">
-            <table class="table table-hover table-bordered text-center">
-                <tr>
-                    <th style="text-align: center">登录IP</th>
-                    <th style="text-align: center">登录时间</th>
-                </tr>
-                {% for v in page_data.items %}
-                <tr>
-                    <td>{{ v.ip }}</td>
-                    <td>{{ v.add_time }}</td>
-                </tr>
-                {% endfor %}
-            </table>
-            <div class="col-md-12 text-center" style="margin-top:6px;">
-                {{pg.page(page_data,'home.loginlog')}}
+    {% include "home/menu.html" %}
+    <div class="col-md-9">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><span class="glyphicon glyphicon-map-marker"></span>&nbsp;登录日志</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover table-bordered text-center">
+                    <tr>
+                        <th style="text-align: center">登录IP</th>
+                        <th style="text-align: center">登录时间</th>
+                    </tr>
+                    {% for v in page_data.items %}
+                        <tr>
+                            <td>{{ v.ip }}</td>
+                            <td>{{ v.add_time }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <div class="col-md-12 text-center" style="margin-top:6px;">
+                    {{ pg.page(page_data,'home.loginlog') }}
+                </div>
             </div>
         </div>
     </div>
-</div>
 {% endblock %}
 
 {% block js %}
-<script>
-    $(document).ready(function () {
-        $("#m-4").addClass("active");
-    });
+    <script>
+        $(document).ready(function () {
+            $("#m-4").addClass("active");
+        });
 
 
-</script>
+    </script>
 {% endblock %}
