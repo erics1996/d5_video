@@ -18,6 +18,9 @@ class BaseConfig(object):
     # print(os.path.abspath(os.path.dirname(__file__)))#/media/thanlon/存储盘/项目实施/开发/Flask/d5_video
     MOVIE_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)), "app/static/admin/uploads/movies/")
     MOVIE_LOGO_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)), "app/static/admin/uploads/movielogos/")
+    PREVIEW_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)), "app/static/admin/uploads/previews/")
+    MAX_CONTENT_LENGTH = 1024 * 1024 * 20  # 控制上传文件大小为20M
+
 
 class ProductionConfig(BaseConfig):
     DEBUG = False

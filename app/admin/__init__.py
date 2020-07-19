@@ -12,3 +12,4 @@ import app.admin.views.moviecol
 import app.admin.views.oplog
 import app.admin.views.auth
 import app.admin.views.role
+import app.admin.views.preview

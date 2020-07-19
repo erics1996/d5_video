@@ -156,11 +156,9 @@ def comment_list():
 
 
 # 登陆日志
-@home.route("/loginlog/<int:page>/", methods=["GET"])
+@home.route("/loginlog/list/<int:page>/", methods=["GET"])
 @user_login_decorator
 def loginlog(page=None):
-    if not page:
-        page = 1
     # UserLog.query.filter_by(user_id=session.get('user_id'))：sql语句
     # UserLog.query.filter_by(user_id=session.get('user_id')).first()：<UserLog 1>
     # filter_by和order_by部分先后顺序

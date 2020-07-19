@@ -5,7 +5,7 @@ from ...models import db
 
 
 # 评论列表
-@admin.route("/admin/comment/list/<int:page>/", methods=["GET"])
+@admin.route("/comment/list/<int:page>/", methods=["GET"])
 def comment_list(page=None):
     page_data = Comment.query.join(
         User
