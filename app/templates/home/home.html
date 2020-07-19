@@ -25,7 +25,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a href="{{ url_for('home.index') }}" class="navbar-brand" style="width:250px;padding-left: 5px">
+            <a href="{{ url_for('home.index') }}" class="navbar-brand" style="width:200px;padding-left: 5px">
                 <img class="wow animate__animated animate__flip"
                      src="{{ url_for('static',filename='public/imgs/logo.png') }}"
                      style="height:30px; display: inline;">&nbsp;
@@ -46,19 +46,19 @@
             </form>
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <a class="curlink" href="{{ url_for('home.index') }}"><span class="glyphicon glyphicon-film"></span>&nbsp;电影</a>
+                    <a class="curlink" href="{{ url_for('home.index') }}"><span class="glyphicon glyphicon-globe"></span>新闻快讯</a>
                 </li>
-                <!--
+                <li>
+                    <a class="curlink" href="{{ url_for('home.index') }}"><span class="glyphicon glyphicon-film"></span>电影</a>
+                </li>
+                <li>
+                    <a class="curlink" href="{{ url_for('home.index') }}"><span class="glyphicon glyphicon-fire"></span>动漫</a>
+                </li>
                 <li>
                     <a class="curlink" href="{{ url_for('home.index') }}"><span
-                            class="glyphicon glyphicon-music"></span>&nbsp;音乐MV</a>
+                            class="glyphicon glyphicon-music"></span>音乐MV</a>
                 </li>
-                -->
-                <!--
-                <li>
-                    <a class="curlink" href="{{ url_for('home.index') }}"><span class="glyphicon glyphicon-fire"></span>&nbsp;动漫</a>
-                </li>
-                -->
+
                 <!--<li>-->
                 <!--<a class="curlink" href="{{ url_for('home.login') }}"><span-->
                 <!--class="glyphicon glyphicon-log-in"></span>&nbsp;登录</a>-->

@@ -194,7 +194,8 @@ class UserDetailForm(FlaskForm):
     submit = SubmitField(
         '保存修改',
         render_kw={
-            "class": "btn btn-primary"
+            "class": "btn btn-primary",
+            "style":"background-color:brown;border:none"
         }
     )
 
@@ -234,7 +235,8 @@ class PwdForm(FlaskForm):
     submit = SubmitField(
         '修改',
         render_kw={
-            "class": "btn btn-primary"
+            "class": "btn btn-primary",
+            "style":"background-color:brown;border:none"
         }
     )
 

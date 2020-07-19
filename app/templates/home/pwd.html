@@ -1,63 +1,71 @@
 {% extends "home/home.html" %}
 {% block css %}
-<link rel="stylesheet" href="{{url_for('static',filename='home/css/user.css')}}/">
+    <link rel="stylesheet" href="{{ url_for('static',filename='home/css/user.css') }}/">
+    <style>
+        .list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
+            background-color: brown;
+            border: none;
+        }
+     .panel-default > .panel-heading {
+            color: #333;
+            background-color: #ccc;
+            border-color: #f5f5f5;
+        }
+    </style>
 {% endblock %}
 {% block content %}
-{% include "home/menu.html" %}
-<div class="col-md-9">
-    {% for msg in get_flashed_messages(category_filter=["ok"]) %}
-    <div class="alert alert-success alert-dismissible">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <strong>{{msg}}</strong>
-    </div>
-    {% endfor %}
-    {% for msg in get_flashed_messages(category_filter=["err"]) %}
-    <div class="alert alert-danger alert-dismissible" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                aria-hidden="true">&times;</span></button>
-        <strong>{{msg}}</strong>
-    </div>
-    {% endfor %}
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title"><span class="glyphicon glyphicon-map-marker"></span>&nbsp;会员中心</h3>
+    {% include "home/menu.html" %}
+    <div class="col-md-9">
+        {% for msg in get_flashed_messages(category_filter=["ok"]) %}
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                <strong>{{ msg }}</strong>
+            </div>
+        {% endfor %}
+        {% for msg in get_flashed_messages(category_filter=["err"]) %}
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <strong>{{ msg }}</strong>
+            </div>
+        {% endfor %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><span class="glyphicon glyphicon-map-marker"></span>&nbsp;修改密码</h3>
+            </div>
+            <div class="panel-body">
+                <form role="form" method="post" novalidate>
+                    <fieldset>
+                        <div class="form-group">
+                            <label for="input_oldpwd">
+                                <span class="glyphicon glyphicon-lock"></span>{{ form.old_pwd.label }}
+                            </label>
+                            {{ form.old_pwd }}
+                            {% for err in form.old_pwd.errors %}
+                                <p style="color:red;font-weight: bold">{{ err }}</p>
+                            {% endfor %}
+                        </div>
+                        <div class="form-group">
+                            <label for="input_newpwd">
+                                <span class="glyphicon glyphicon-lock"></span>{{ form.new_pwd.label }}
+                            </label>
+                            {{ form.new_pwd }}
+                            {% for err in form.new_pwd.errors %}
+                                <p style="color:red;font-weight: bold">{{ err }}</p>
+                            {% endfor %}
+                        </div>
+                        {{ form.csrf_token }}
+                        {{ form.submit }}
+                    </fieldset>
+                </form>
+            </div>
         </div>
-        <div class="panel-body">
-            <form role="form" method="post" novalidate>
-                <fieldset>
-                    <div class="form-group">
-                        <label for="input_oldpwd">
-                            <span class="glyphicon glyphicon-lock"></span>{{form.old_pwd.label}}
-                        </label>
-                        {{form.old_pwd}}
-                        {% for err in form.old_pwd.errors %}
-                        <p style="color:red;font-weight: bold">{{ err }}</p>
-                        {% endfor %}
-                    </div>
-                    <div class="form-group">
-                        <label for="input_newpwd">
-                            <span class="glyphicon glyphicon-lock"></span>{{form.new_pwd.label}}
-                        </label>
-                        {{form.new_pwd}}
-                        {% for err in form.new_pwd.errors %}
-                        <p style="color:red;font-weight: bold">{{ err }}</p>
-                        {% endfor %}
-                    </div>
-                    {{form.csrf_token}}
-                    {{form.submit}}
-                </fieldset>
-            </form>
-        </div>
     </div>
-</div>
 {% endblock %}
-
 {% block js %}
-<script>
-    $(document).ready(function () {
-        $("#m-2").addClass("active");
-    });
-
-
-</script>
+    <script>
+        $(document).ready(function () {
+            $("#m-2").addClass("active");
+        });
+    </script>
 {% endblock %}
