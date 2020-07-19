@@ -1,51 +1,48 @@
 {% extends "home/home.html" %}
 {% block css %}
-<link rel="stylesheet" href="{{url_for('static',filename='home/css/user.css')}}/">
+    <link rel="stylesheet" href="{{ url_for('static',filename='home/css/user.css') }}/">
 {% endblock %}
 {% block content %}
-{% include "home/menu.html" %}
-<div class="col-md-9">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title"><span class="glyphicon glyphicon-map-marker"></span>&nbsp;评论记录</h3>
-        </div>
-        <div class="panel-body">
-
-            <ul class="commentList">
-                <li class="item cl">
-                    <a>
-                        <i class="avatar size-L radius">
-                            <img alt="50x50" data-src="holder.js/50x50"
-                                 src="" class="img-circle"
-                                 style="border:1px solid #abcdef;width:50px;">
-                        </i>
-                    </a>
-                    <div class="comment-main">
-                        <header class="comment-header">
-                            <div class="comment-meta">
-                                <a class="comment-author" href="{{url_for('home.user')}}">
-                                </a>
-                                <sapn>关于《》</sapn>
-                                评论于&nbsp;
-                                <!-- <time title="" datetime="">
-                                     time
-                                 </time>-->
-                            </div>
-                        </header>
-                        <div class="comment-body">
-                        </div>
-                    </div>
-                </li>
-            </ul>
-
+    {% include "home/menu.html" %}
+    <div class="col-md-9">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"><span class="glyphicon glyphicon-map-marker"></span>&nbsp;评论记录</h3>
+            </div>
+            <div class="panel-body">
+                <ul class="commentList" id="container_comments">
+                </ul>
+            </div>
         </div>
     </div>
-</div>
 {% endblock %}
 {% block js %}
-<script>
-    $(document).ready(function () {
-        $("#m-3").addClass("active");
-    });
-</script>
+    <script>
+        $(document).ready(function () {
+            $("#m-3").addClass("active");
+            get_comment();
+        });
+
+        function get_comment() {
+            $.ajax({
+                url: '/api/user/comment/list/',
+                datatype: 'json',
+                type: 'GET',
+                success: function (arg) {
+                    if (arg.status) {
+                        console.log('success')
+                        $('#container_comments').html('');
+                        $.each(arg.user, function (index, row) {
+                            //console.log(index);
+                            //console.log(row.movie_name)
+                            //console.log(row.add_time)
+                            //console.log(row.content)
+                            var comment = "<li class=\"item cl\">" + "<a>" + "<i class=\"avatar size-L radius\">" + "<img alt=\"50x50\" data-src=\"holder.js/50x50\"" + "src=\"" + "{{ url_for('static',filename='home/uploads/users/'+session.get('face')) }}" +"\"" + "class=\"img-circle\"" + "style=\"border:1px solid #abcdef;width:50px;\">" + "</i>" + "</a>" + "<div class=\"comment-main\">" + "<header class=\"comment-header\">" + "<div class=\"comment-meta\">" + "<a class=\"comment-author\" href=\"\">" + "{{ session.get('user') }}" + "</a>" + "<sapn></sapn>" + "评论于&nbsp;" + "<time title=\"\" datetime=\"2016-12-07 09:12:51\">" + row.add_time + "</time>" + "</div>" + "</header>" + "<div class=\"comment-body\">" + row.content + "</div>" + "</div>" + "</li>";
+                            $('#container_comments').append(comment)
+                        })
+                    }
+                }
+            })
+        }
+    </script>
 {% endblock %}
