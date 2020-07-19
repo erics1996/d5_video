@@ -1,10 +1,16 @@
 from app.home import home
 from flask import render_template
+from ...models import Preview
 
 
 @home.route('/')
 def index():
-    return render_template('home/index.html')
+    preview_data = Preview.query.all()
+    # print(preview_data)  # [<Preview 17>]
+    first_preview_id = Preview.query.order_by(Preview.id.asc()).first().id  # <Preview 17>
+    # first_preview_id = Preview.query.order_by(Preview.id.asc())  # sql
+    # print(first_preview_id.id)
+    return render_template('home/index.html', preview_data=preview_data, first_preview_id=first_preview_id)
 
 
 @home.route('/index.html')
