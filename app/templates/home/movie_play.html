@@ -396,7 +396,7 @@
         function show_comments() {
             var movie_id = {{ movie.id }};
             $.ajax({
-                url: '/movie/comment/list/1',
+                url: '/movie/comment/list/',
                 type: 'GET',
                 data: {
                     'movie_id': movie_id,
@@ -410,7 +410,7 @@
                         $('#commentList').html('');
                         $.each(data.user, function (i, row) {
                             //console.log(row.face, row.movie_comment);
-                            var comment_li = "<li class=\"item cl\" id=\"comment_li\">\n" + "<a href=\"user.html\">\n" + "<i class=\"avatar size-L radius\">\n" + "<img  id=\"user_face\" alt=\"50x50\" data-src=\"holder.js/50x50\" class=\"img-circle\"\n" + "style=\"border:1px solid #abcdef;\"\n" + "src={{ url_for('static',filename='home/uploads/users/') }}" + row.face + " width=50px height=50px>\n" + "</i>" + "</a>" + "<div class=\"comment-main\">\n" + "<header class=\"comment-header\">\n" + "<div class=\"comment-meta\">\n" + "<a class=\"comment-author\" href=\"user.html\">" + row.username + "</a>\n" + "评论于\n" + "<time title=\"\" datetime=\"2016-12-07 09:12:51\">" + row.add_time + "\n" + "</time>\n" + "</div>\n" + "</header>\n" + "<div class=\"comment-body\">\n" + "<p id=\"comment_p\">" + row.movie_comment + "</p>\n" + "</div>\n" + "</div>\n" + "</li>"
+                            var comment_li = "<li class=\"item cl\" id=\"comment_li\">\n" + "<a href=\"user.html\">\n" + "<i class=\"avatar size-L radius\">\n" + "<img  id=\"user_face\" alt=\"50x50\" data-src=\"holder.js/50x50\" class=\"img-circle\"\n" + "style=\"border:1px solid #abcdef;\"\n" + "src={{ url_for('static',filename='home/uploads/users/') }}" + row.face + " width=50px height=50px>\n" + "</i>" + "</a>" + "<div class=\"comment-main\">\n" + "<header class=\"comment-header\">\n" + "<div class=\"comment-meta\">\n" + "<span class='glyphicon glyphicon-map-marker'></span>上海浦东新区 " + "<a class=\"comment-author\" href=\"\">" + row.username + "</a>\n" + "评论于\n" + "<time title=\"\" datetime=\"2016-12-07 09:12:51\">" + row.add_time + "\n" + "</time>\n" + "</div>\n" + "</header>\n" + "<div class=\"comment-body\">\n" + "<p id=\"comment_p\">" + row.movie_comment + "</p>\n" + "</div>\n" + "</div>\n" + "</li>"
                             $('#commentList').append(comment_li);
                         })
                     } else {

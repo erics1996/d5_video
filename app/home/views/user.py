@@ -149,9 +149,9 @@ def pwd():
 
 
 # 评论列表
-@home.route("/comment/<int:page>", methods=["GET"])
+@home.route("/comment/", methods=["GET"])
 @user_login_decorator
-def comment_list(page=None):
+def comment_list():
     return render_template('home/comment.html')
 
 
@@ -201,7 +201,7 @@ def comment_add():
     return jsonify(ret)
 
 
-@home.route('/movie/comment/list/<int:page>', methods=['GET'])
+@home.route('/movie/comment/list/', methods=['GET'])
 def show_movie_comment(page=None):
     if not None:
         page = 1
@@ -242,4 +242,40 @@ def show_movie_comment(page=None):
     jsonify(ret)
     print(
         ret)  # {'status': True, 'msg': None, 'user': {'face': '202007162204485797a85fb89d4360a3e1fd63660105c8.jpg', 'comment_content': '太好看了！'}}
+    return jsonify(ret)
+
+
+# 获取用户评论列表
+@home.route('/api/user/comment/list/')
+def get_user_comment(page=None):
+    if not page:
+        page = 1
+    ret = {'status': 1, 'msg': None}
+    """
+    # 如何查指定的字段
+    comment = Comment.query.join(
+        User
+    ).join(
+        Movie
+    ).filter(
+        Comment.user_id == User.id,
+        Comment.movie_id == Movie.id
+    ).order_by(
+        Comment.add_time.desc()
+    ).filter(Comment.content)
+    SELECT comment.id AS comment_id, comment.content AS comment_content, comment.add_time AS comment_add_time, comment.movie_id AS comment_movie_id, comment.user_id AS comment_user_id 
+FROM comment INNER JOIN user ON user.id = comment.user_id INNER JOIN movie ON movie.id = comment.movie_id 
+WHERE comment.user_id = user.id AND comment.movie_id = movie.id AND comment.content ORDER BY comment.add_time DESC
+    """
+    comment_obj_list = Comment.query.join(
+        Movie
+    ).filter(
+        Comment.movie_id == Movie.id
+    ).order_by(
+        Comment.add_time.desc()
+    ).all()  # all()之后就成对象了
+    ret['user'] = []
+    for obj in comment_obj_list:
+        ret['user'].append({'movie_name': obj.movie.title, 'add_time': obj.add_time, 'content': obj.content})
+    print(ret)
     return jsonify(ret)

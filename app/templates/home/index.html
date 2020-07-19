@@ -16,8 +16,8 @@
                         <!-- Wrapper for slides -->
                         <div class="carousel-inner" role="listbox">
                             <div class="item active">
-                                <img class="lazy img-responsive center-block"
-                                     data-original="https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3378845190,1441759945&fm=26&gp=0.jpg"
+                                <img class="img-responsive center-block"
+                                     src="https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=3378845190,1441759945&fm=26&gp=0.jpg"
                                      alt="...">
                                 <div class="carousel-caption"></div>
                             </div>
@@ -167,7 +167,9 @@
 {% endblock %}
 {% block copyright %}
     <!--版权-->
-    <div class="col-md-12  text-center" style="padding: 25px 0 25px;background: brown;margin-top: 8px">
+   <!-- <div class="col-md-12  text-center wow animate__animated animate__backInDown animate__delay-2s"-->
+    <div class="col-md-12  text-center wow animate__animated animate__fadeIn"
+         style="padding: 25px 0 25px;background: brown;margin-top: 8px">
         <p style="margin: 0">
             <a href="{{ url_for('home.about_website') }}" style="color:white;font-weight: bold">关于本站</a>&nbsp;&nbsp;
             <a href="{{ url_for('home.disclaimer') }}" style="color:white;font-weight: bold">免责申明</a>&nbsp;&nbsp;
