@@ -22,8 +22,8 @@
                             <div class="input-group-addon btn" style="background: #0682f5;color: white;"
                                  onclick="newDanmu()"><span class="glyphicon glyphicon-send"></span>发送弹幕
                             </div>
-                            <div class="input-group-addon btn" style="background: #d9534f;color: white;"
-                                 onclick=""><span class="glyphicon glyphicon-heart"></span>收藏
+                            <div id="btn-col" class="input-group-addon btn" style="background: #d9534f;color: white;">
+                                <span class="glyphicon glyphicon-heart"></span><span id="collect_font"></span>
                             </div>
                         {% else %}
                             <div onclick="alert('请先登录才可以收藏！')" class="input-group-addon btn"
@@ -357,6 +357,8 @@
         $(function () {
             commit_comment();
             show_comments();
+            moviecol_add();
+            get_moviecol_status();
         })
 
         function commit_comment() {
@@ -415,6 +417,55 @@
                         })
                     } else {
                         alert(data.msg)
+                    }
+                }
+            })
+        }
+
+        function moviecol_add() {
+            $("#btn-col").click(function () {
+                var user_id = {{ session.get('user_id') }};
+                var movie_id = {{ movie.id }};
+                $.ajax({
+                    url: '{{ url_for('home.moviecol_add') }}',
+                    dataType: 'json',
+                    //data: "user_id=" + user_id + "&movie_id=" + movie_id,
+                    data: {
+                        'user_id': user_id,
+                        'movie_id': movie_id
+                    },
+                    type: 'GET',
+                    success: function (arg) {
+                        if (arg.ok) {
+                            $('#collect_font').text('已收藏')
+                            alert('已经收藏过了，不需要再次操作！！')
+                        } else {
+                            $('#collect_font').text('收藏')
+                            alert('收藏成功')
+                        }
+                    }
+                })
+            })
+        }
+
+        function get_moviecol_status() {
+            var user_id = {{ session.get('user_id') }};
+            var movie_id = {{ movie.id }};
+            $.ajax({
+                url: '/api/moviecol/status/',
+                dataType: 'json',
+                data: {
+                    'user_id': user_id,
+                    'movie_id': movie_id
+                },
+                type: 'GET',
+                success: function (arg) {
+                    if (arg.ok) {
+                        $('#collect_font').text('已收藏')
+                        //alert('已经收藏过了，不需要再次操作！！')
+                    } else {
+                        $('#collect_font').text('收藏')
+                        //alert('收藏成功')
                     }
                 }
             })
