@@ -3,10 +3,11 @@ from ..forms.role_form import RoleForm
 from flask import render_template, flash, redirect, url_for
 from ...models import Role
 from app import db
-
+from .decorator import admin_login_decorator
 
 # 添加角色
 @admin.route("/role/add/", methods=["GET", "POST"])
+@admin_login_decorator
 def role_add():
     form = RoleForm()
     if form.validate_on_submit():
@@ -24,6 +25,7 @@ def role_add():
 
 # 角色列表
 @admin.route("/role/list/<int:page>", methods=["GET"])
+@admin_login_decorator
 def role_list(page=None):
     if not page:
         page = 1
@@ -33,6 +35,7 @@ def role_list(page=None):
 
 # 角色编辑
 @admin.route("/role/list/<int:id>", methods=["GET"])
+@admin_login_decorator
 def role_edit(page=None):
     if not page:
         page = 1
@@ -42,5 +45,6 @@ def role_edit(page=None):
 
 # 角色删除
 @admin.route("/role/del/<int:id>", methods=["GET"])
+@admin_login_decorator
 def role_del(id=None):
     return ''

@@ -7,10 +7,11 @@ from app.utils.alter_filename import change_filename
 from ...models import db
 from app import app
 import os
-
+from .decorator import admin_login_decorator
 
 # 添加电影预告
 @admin.route("/preview/add/", methods=["POST", "GET"])
+@admin_login_decorator
 def preview_add():
     form = PreviewForm()
     if form.validate_on_submit():
@@ -37,17 +38,20 @@ def preview_add():
 
 # 电影预告列表
 @admin.route("/preview/list/")
+@admin_login_decorator
 def preview_list(page=None):
     page_data = Preview.query.paginate(page=1, per_page=10)
     return render_template('admin/preview_list.html', page_data=page_data)
 
 
 @admin.route('/preview/edit/')
+@admin_login_decorator
 def preview_edit(page=None):
     return ''
 
 
 @admin.route('/preview/del/<int:id>/')
+@admin_login_decorator
 def preview_del(id):
     preview = Preview.query.filter_by(id=id).first_or_404()
     db.session.delete(preview)

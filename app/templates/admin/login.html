@@ -1,64 +1,72 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-cn">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>D5影视网后台管理</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <link rel="shortcut icon" href="{{ url_for('static',filename='base/images/logo.png')}}">
-    <link rel="stylesheet" href="{{url_for('static',filename='admin/bootstrap/css/bootstrap.min.css')}}">
-    <link rel="stylesheet" href="{{url_for('static',filename='fonts/css/font-awesome.min.css')}}">
-    <link rel="stylesheet" href="{{url_for('static',filename='ionicons/css/ionicons.min.css')}}">
-    <link rel="stylesheet" href="{{url_for('static',filename='admin/dist/css/AdminLTE.min.css')}}">
-    <link rel="stylesheet" href="{{url_for('static',filename='admin/plugins/iCheck/square/blue.css')}}">
+    <link rel="shortcut icon" href="{{ url_for('static',filename='public/imgs/logo.png') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <style>
+        .panel-primary {
+            border-color: #3c8dbc;
+        }
+
+        .panel-primary > .panel-heading {
+            color: #fff;
+            background-color: #3c8dbc;
+            border-color: white;
+        }
+
+        .btn-primary {
+            color: #fff;
+            background-color: #3c8dbc;
+            border-color: white;
+        }
+    </style>
 </head>
 <body class="hold-transition login-page">
-<div class="login-box">
-    <div class="login-logo">
-        <a href=""><b>D5影视网后台管理</b></a>
-    </div>
-    <div class="login-box-body">
-        {% for msg in get_flashed_messages(category_filter=["err"]) %}
-        <p class="login-box-msg" style="color:red">{{msg}}</p>
-        {% endfor %}
-        {% for msg in get_flashed_messages(category_filter=["okey"]) %}
-        <p class="login-box-msg" style="color:green">{{msg}}</p>
-        {% endfor %}
-        <form method="POST" id="form-data">
-            <div class="form-group has-feedback">
-                <!--<input name="users" type="text" >-->
-                {{ form.account }}
-                <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-                {% for err in form.account.errors %}
-                <div class="col-md-12">
-                    <font style="color:red">{{ err }}</font>
+<div class="container">
+    <div class="row" style="margin-top: 10%">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title text-center">D5影视网后台管理员登录</h3>
                 </div>
-                {% endfor %}
-            </div>
-            <div class="form-group has-feedback">
-                <!--<input name="pwd" type="password">-->
-                {{form.pwd}}
-                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-                {% for err in form.pwd.errors %}
-                <div class="col-md-12">
-                    <font style="color:red">{{ err }}</font>
-                </div>
-                {% endfor %}
-            </div>
-            <div class="row">
-                <div class="col-xs-8">
-                </div>
-                <div class="col-xs-4">
-                    <!--<a id="btn-sub" type="submit">登录</a>-->
-                    {{form.submit}}
-                    {{form.csrf_token}}
+                <div class="panel-body">
+                    <form role="form" method="post">
+                        <fieldset>
+                            {% for msg in get_flashed_messages(category_filter=["err"]) %}
+                                <p style="color:red;font-weight: bold">{{ msg }}</p>
+                            {% endfor %}
+                            {% for msg in get_flashed_messages(category_filter=["ok"]) %}
+                                <p style="color:green">{{ msg }}</p>
+                            {% endfor %}
+                            <div class="form-group">
+                                <label for="input_contact"><span
+                                        class="glyphicon glyphicon-user"></span>{{ form.name.label }}</label>
+                                {{ form.name }}
+                            </div>
+                            <div class="col-md-12">
+                                <font style="color:red">{{ err }}</font>
+                            </div>
+                            <div class="form-group">
+                                <label for="input_password"><span
+                                        class="glyphicon glyphicon-lock"></span>{{ form.pwd.label }}</label>
+                                {{ form.pwd }}
+                            </div>
+                            <div class="col-md-12">
+                                {{ form.csrf_token }}
+                                {{ form.submit }}
+                                <font style="color:red">{{ err }}</font>
+                            </div>
+                        </fieldset>
+                    </form>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 </div>
-<script src="{{url_for('static',filename='admin/plugins/jQuery/jQuery-2.2.0.min.js')}}"></script>
-<script src="{{url_for('static',filename='admin/bootstrap/js/bootstrap.min.js')}}"></script>
-<script src="{{url_for('static',filename='admin/plugins/iCheck/icheck.min.js')}}"></script>
 </body>
 </html>

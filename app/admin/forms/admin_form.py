@@ -57,3 +57,36 @@ class AdminForm(FlaskForm):
             "class": "btn btn-primary"
         }
     )
+
+
+class AdminLoginForm(FlaskForm):
+    name = StringField(
+        label="管理员账号",
+        validators=[
+            DataRequired("请输入管理员账号！")
+        ],
+        description="管理员账号",
+        render_kw={
+            "class": "form-control",
+            "id": "input_name",
+            "placeholder": "请输入管理员账号！",
+        }
+    )
+    pwd = PasswordField(
+        label="管理员密码",
+        validators=[
+            DataRequired("请输入管理员密码！")
+        ],
+        description="密码",
+        render_kw={
+            "class": "form-control",
+            "placeholder": "请输入管理员密码！",
+        }
+
+    )
+    submit = SubmitField(
+        '登录',
+        render_kw={
+            "class": "btn btn-primary"
+        }
+    )
