@@ -1,4 +1,5 @@
 {% extends "home/home.html" %}
+{% import 'home/pagination/home_page.html' as pg %}
 {% block css %}
     <link rel="stylesheet" href="{{ url_for('static',filename='home/css/user.css') }}/">
     <style>
@@ -22,8 +23,47 @@
                 <h3 class="panel-title"><span class="glyphicon glyphicon-map-marker"></span>&nbsp;评论记录</h3>
             </div>
             <div class="panel-body">
-                <ul class="commentList" id="container_comments">
+                {#                <ul class="commentList" id="container_comments">#}
+                <ul class="commentList">
+                    {% for v in page_data.items %}
+                        <li class="item cl">
+                            <a>
+                                <i class="avatar size-L radius">
+                                    {#                                    {% if v.user.face %}#}
+                                    {#                                        <img alt="50x50"#}
+                                    {#                                             src="{{ url_for('static',filename='uploads/users/'+v.user.face) }}"#}
+                                    {#                                             class="img-circle"#}
+                                    {#                                             style="border:1px solid #abcdef;width:50px;">#}
+                                    {#                                    {% else %}#}
+                                    {#                                        <img alt="50x50" data-src="holder.js/50x50" class="img-circle"#}
+                                    {#                                             style="border:1px solid #abcdef;width:50px;">#}
+                                    {#                                    {% endif %}#}
+                                    <img alt="50x50"
+                                         src="{{ url_for('static',filename='home/uploads/users/'+session.get('face')) }}"
+                                         class="img-circle"
+                                         style="border:1px solid #abcdef;width:50px;">
+                                </i>
+                            </a>
+                            <div class="comment-main">
+                                <header class="comment-header">
+                                    <div class="comment-meta">
+{#                                        <a class="comment-author" href="user.html">您</a>#}
+                                        评论《{{ v.movie.title }}》于
+                                        <time title="{{ v.add_time }}" datetime="{{ v.add_time }}">
+                                            {{ v.add_time }}
+                                        </time>
+                                    </div>
+                                </header>
+                                <div class="comment-body">
+                                    <p>{{ v.content | safe }}</p>
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
                 </ul>
+                <div class="col-md-12 text-center" style="margin-top:6px;">
+                    {{ pg.page(page_data,'home.comment_list') }}
+                </div>
             </div>
         </div>
     </div>
@@ -32,7 +72,7 @@
     <script>
         $(document).ready(function () {
             $("#m-3").addClass("active");
-            get_comment();
+            {#get_comment();#}
         });
 
         function get_comment() {

@@ -2,6 +2,7 @@ from app.home import home
 from flask import render_template, flash, request, redirect, url_for, session, jsonify
 from ..forms.user_form import RegisterForm, LoginForm, UserDetailForm, PwdForm
 from ...models import User, UserLog, Comment, Movie
+from ... import models
 from app import db
 from werkzeug.security import generate_password_hash
 import uuid
@@ -10,6 +11,7 @@ from werkzeug.utils import secure_filename
 import os
 from ...utils.alter_filename import change_filename
 from app import app
+from .decorator import user_login_decorator
 
 
 # 会员注册
@@ -62,6 +64,7 @@ def login():
     return render_template('home/login.html', form=form)
 
 
+# 退出登录(接口)
 @home.route("/api/v1/user/logout/")
 def logout():
     ret = {'status': 1, 'msg': None}
@@ -73,16 +76,6 @@ def logout():
         ret['status'] = 0
         ret['msg'] = '退出失败！'
     return jsonify(ret)
-
-
-def user_login_decorator(func):
-    @wraps(func)
-    def inner(*args, **kwargs):
-        if not session.get('user'):
-            return redirect(url_for('home.login', next=request.url))
-        return func(*args, **kwargs)
-
-    return inner
 
 
 # 修改会员基本资料
@@ -148,12 +141,17 @@ def pwd():
     return render_template('home/pwd.html', form=form)
 
 
-# 评论列表
-@home.route("/comment/", methods=["GET"])
+# 评论记录
+@home.route("/comment/list/<int:page>/", methods=["GET"])
 @user_login_decorator
-def comment_list():
-
-    return render_template('home/comment.html')
+def comment_list(page=None):
+    page_data = models.Comment.query.order_by(
+        models.Comment.add_time.desc()
+    ).filter_by(
+        user_id=session.get('user_id')
+    ).paginate(page=page, per_page=10)
+    print(page_data)
+    return render_template('home/comment.html', page_data=page_data)
 
 
 # 登陆日志
@@ -173,79 +171,7 @@ def login_log(page=None):
     return render_template('home/login_log.html', page_data=page_data)
 
 
-@home.route('/comment/add/', methods=['POST'])
-@user_login_decorator
-def comment_add():
-    ret = {'status': True, 'msg': None}
-    try:
-        # all = request.form  # ImmutableMultiDict([('comment_content', '你好'), ('user_id', '1'), ('movie_id', '3')])
-        comment_content = request.form['comment_content']
-        if len(comment_content) == 0:
-            ret['status'] = False
-            ret['msg'] = '评论内容不能为空！'
-            return jsonify(ret)
-        # print(comment_content, type(comment_content))  # 你好 <class 'str'>
-        user_id = request.form['user_id']  # <class 'str'> 数据库是int，这里不使用int也可以
-        movie_id = request.form['movie_id']  # <class 'str'>
-        comment = Comment(
-            content=comment_content,
-            user_id=user_id,
-            movie_id=movie_id
-        )
-        db.session.add(comment)
-        db.session.commit()
-        db.session.remove()
-    except Exception as e:
-        ret['status'] = False
-        ret['msg'] = str(e)
-        # ret['msg'] = '删除失败'
-    return jsonify(ret)
-
-
-@home.route('/movie/comment/list/', methods=['GET'])
-def show_movie_comment(page=None):
-    if not None:
-        page = 1
-    ret = {'status': True, 'msg': None}
-    try:
-        movie_id = request.args.get('movie_id')  # <class 'str'>
-        movie_comment_obj_list_page_data = Comment.query.join(
-            User
-        ).join(
-            Movie
-        ).filter(
-            Movie.id == Comment.movie_id,
-            User.id == Comment.user_id,
-            Movie.id == movie_id
-        ).order_by(
-            Comment.add_time.desc()
-        ).paginate(page=page, per_page=8)
-        # 加不加all()都可以
-        ret['user'] = []
-        for obj in movie_comment_obj_list_page_data.items:
-            # print(obj.user.face)  # 202007162204485797a85fb89d4360a3e1fd63660105c8.jpg
-            # print(obj.content)  # 太好看了！
-            ret['user'].append({'username': obj.user.name, 'face': obj.user.face, 'movie_comment': obj.content,
-                                'add_time': str(obj.add_time)})
-            # ret['user']['face'].append(obj.user.face)
-            # ret['user']['movie_comment'].append(obj.content)
-
-    except Exception as e:
-        print(e)  # Entity '<class 'app.models.User'>' has no property 'movie_id'
-        ret['status'] = False
-        ret['msg'] = str(e)  # Entity '<class 'app.models.User'>' has no property 'movie_id'
-        ret['msg'] = '获取评论列表失败！'
-    """
-    import json
-    print(json.dumps(ret))  # {"status": true, "msg": null, "user": {"face": "202007162204485797a85fb89d4360a3e1fd63660105c8.jpg", "comment_content": "\u592a\u597d\u770b\u4e86\uff01"}}
-    print(jsonify(ret))  # <Response 151 bytes [200 OK]>
-    """
-    jsonify(ret)
-    print(
-        ret)  # {'status': True, 'msg': None, 'user': {'face': '202007162204485797a85fb89d4360a3e1fd63660105c8.jpg', 'comment_content': '太好看了！'}}
-    return jsonify(ret)
-
-
+# 评论列表(接口)
 @home.route('/api/user/comment/list/')
 def get_user_comment(page=None):
     if not page:
@@ -282,3 +208,22 @@ WHERE comment.user_id = user.id AND comment.movie_id = movie.id AND comment.cont
         ret['user'].append({'movie_name': obj.movie.title, 'add_time': obj.add_time, 'content': obj.content})
     # print(ret)
     return jsonify(ret)
+
+
+# 用户收藏的视频列表
+@home.route("/moviecol/list/<int:page>/")
+def moviecol_list(page=None):
+    page_data = models.Moviecol.query.order_by(
+        models.Moviecol.addtime.desc()
+    ).paginate(page=page, per_page=10)
+    print(page_data)
+    return render_template('home/moviecol.html', page_data=page_data)
+
+# 取消电影收藏
+# @home.route("/moviecol/del/<int:id>/", methods=["GET"])
+# def moviecol_del(id=None):
+#     moviecol = models.Moviecol.query.filter_by(id=id).first()
+#     db.session.delete(moviecol)
+#     db.session.commit()
+#     db.session.remove()
+#     return redirect(url_for('admin.moviecol_list', page=1))
