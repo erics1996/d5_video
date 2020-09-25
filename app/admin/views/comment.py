@@ -2,10 +2,11 @@ from .. import admin
 from flask import render_template, redirect, url_for
 from ...models import Comment, User, Movie
 from ...models import db
-
+from .decorator import admin_login_decorator
 
 # 评论列表
 @admin.route("/comment/list/<int:page>/", methods=["GET"])
+@admin_login_decorator
 def comment_list(page=None):
     page_data = Comment.query.join(
         User
@@ -23,6 +24,7 @@ def comment_list(page=None):
 
 # 删除评论
 @admin.route("/comment/del/<int:id>/", methods=["GET"])
+@admin_login_decorator
 def comment_del(id=None):
     comment = Comment.query.filter_by(id=id).first_or_404()  # <Comment 45>
     """

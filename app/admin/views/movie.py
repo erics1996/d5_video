@@ -7,10 +7,11 @@ import os
 from ...utils.alter_filename import change_filename
 from app import app
 from ...models import Movie, Tag
-
+from .decorator import admin_login_decorator
 
 # 添加电影
 @admin.route("/movie/add/", methods=["GET", "POST"])
+@admin_login_decorator
 def movie_add():
     form = MovieForm()
     if form.validate_on_submit():
@@ -51,6 +52,7 @@ def movie_add():
 
 # 电影列表
 @admin.route("/movie/list/")
+@admin_login_decorator
 def movie_list(page=None):
     if not page:
         page = 1

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-cn">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -45,15 +45,21 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <img src="{{ url_for('static',filename='admin/imgs/default.jpeg') }}"
                                  class="user-image" alt="User Image">
-                            <span class="hidden-xs">xxx</span>
+                            <span class="hidden-xs">
+                                 {% if session.get('admin',None) %}
+                                     {{ session.get('admin',None) }}
+                                 {% endif %}
+                            </span>
                         </a>
                         <ul class="dropdown-menu">
                             <li class="user-header">
                                 <img src="{{ url_for('static',filename='admin/imgs/default.jpeg') }}"
                                      class="img-circle" alt="User Image">
                                 <p>
-                                    xxx
-                                    <small>2017-06-01</small>
+                                    {% if session.get('admin',None) %}
+                                        {{ session.get('admin',None) }}
+                                    {% endif %}
+                                    {#                                    <small>本次登录时间：2017-06-01</small>#}
                                 </p>
                             </li>
                             <li class="user-footer">
@@ -61,7 +67,8 @@
                                     <a href="{{ url_for('admin.pwd') }}" class="btn btn-default btn-flat">修改密码</a>
                                 </div>
                                 <div class="pull-right">
-                                    <a href="{{ url_for('admin.login') }}" class="btn btn-default btn-flat">退出系统</a>
+                                    <a href="{{ url_for('admin.logout') }}" class="btn btn-default btn-flat"
+                                       onclick="confirm('确认退出系统？')">退出系统</a>
                                 </div>
                             </li>
                         </ul>
@@ -78,8 +85,14 @@
                          alt="User Image">
                 </div>
                 <div class="pull-left info">
-                    <p>牛新龙</p>
-                    <a href="#"><i class="fa fa-circle text-success"></i> 在线</a>
+                    <p>
+                        {% if session.get('admin',None) %}
+                            {{ session.get('admin',None) }}
+                        {% endif %}
+                    </p>
+                    <a href="#">
+                        <i class="fa fa-circle text-success"></i> 在线
+                    </a>
                 </div>
             </div>
             <form action="#" method="get" class="sidebar-form">
@@ -104,11 +117,13 @@
         <div class="pull-right hidden-xs">
             <b>版本</b> 1.0
         </div>
-        <strong>版权 &copy; 2020-2022 归<a href="https://blog.csdn.net/Thanlon" target="_blank"> blog.csdn.net/Thanlon</a></strong> 所有
+        <strong>版权 &copy; 2020-2022 归<a href="https://blog.csdn.net/Thanlon" target="_blank"> blog.csdn.net/Thanlon</a></strong>
+        所有
     </footer>
     <div class="control-sidebar-bg"></div>
 </div>
-<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+{#<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>#}
+<script src="{{ url_for('static',filename='public/js/jquery-3.5.1.min.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
         crossorigin="anonymous"></script>

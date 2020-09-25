@@ -8,5 +8,5 @@ Migrate(app=app, db=db)
 manager.add_command('db', MigrateCommand)
 
 if __name__ == '__main__':
-    # manager.run()
+    # manager.run()  # 迁移数据时打开注释
     app.run(port=5051, host='127.0.0.1')

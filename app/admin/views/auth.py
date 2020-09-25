@@ -3,10 +3,11 @@ from flask import render_template, flash, redirect, url_for
 from ..forms.auth_form import AuthForm
 from ...models import Auth
 from app import db
-
+from .decorator import admin_login_decorator
 
 # 权限添加
 @admin.route("/admin/auth/add/", methods=["GET", "POST"])
+@admin_login_decorator
 def auth_add():
     form = AuthForm()
     if form.validate_on_submit():
@@ -22,12 +23,14 @@ def auth_add():
 
 # 编辑权限
 @admin.route("/admin/role/edit/<int:id>", methods=["GET", "POST"])
+@admin_login_decorator
 def auth_edit(id=None):
     return ''
 
 
 # 权限列表
 @admin.route("/admin/auth/list/<int:page>", methods=["GET"])
+@admin_login_decorator
 def auth_list(page=None):
     if not page:
         page = 1
@@ -37,5 +40,6 @@ def auth_list(page=None):
 
 # 删除权限列表
 @admin.route("/admin/auth/del/<int:id>", methods=["GET"])
+@admin_login_decorator
 def auth_del(id=None):
     return ''

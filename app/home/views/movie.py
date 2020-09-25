@@ -1,6 +1,7 @@
 from app.home import home
 from flask import render_template, request, jsonify
 from ... import models
+from ...models import Comment,User,Movie
 from app import db
 from .user import user_login_decorator
 
@@ -53,7 +54,6 @@ def get_movie_list():
         print(e)
     return jsonify(ret)
 
-
 # 添加电影收藏
 @home.route("/moviecol/add/", methods=["GET", 'POST'])
 def moviecol_add():
@@ -92,3 +92,78 @@ def get_moviecol_status():
     else:
         data = dict(ok=0)
     return jsonify(data)
+
+
+# 添加评论(接口)
+@home.route('/movie/comment/add/', methods=['POST'])
+@user_login_decorator
+def comment_add():
+    ret = {'status': True, 'msg': None}
+    try:
+        # all = request.form  # ImmutableMultiDict([('comment_content', '你好'), ('user_id', '1'), ('movie_id', '3')])
+        comment_content = request.form['comment_content']
+        if len(comment_content) == 0:
+            ret['status'] = False
+            ret['msg'] = '评论内容不能为空！'
+            return jsonify(ret)
+        # print(comment_content, type(comment_content))  # 你好 <class 'str'>
+        user_id = request.form['user_id']  # <class 'str'> 数据库是int，这里不使用int也可以
+        movie_id = request.form['movie_id']  # <class 'str'>
+        comment = Comment(
+            content=comment_content,
+            user_id=user_id,
+            movie_id=movie_id
+        )
+        db.session.add(comment)
+        db.session.commit()
+        db.session.remove()
+    except Exception as e:
+        ret['status'] = False
+        ret['msg'] = str(e)
+        # ret['msg'] = '删除失败'
+    return jsonify(ret)
+
+
+# 评论列表(接口)
+@home.route('/movie/comment/list/', methods=['GET'])
+def show_movie_comment(page=None):
+    if not None:
+        page = 1
+    ret = {'status': True, 'msg': None}
+    try:
+        movie_id = request.args.get('movie_id')  # <class 'str'>
+        movie_comment_obj_list_page_data = Comment.query.join(
+            User
+        ).join(
+            Movie
+        ).filter(
+            Movie.id == Comment.movie_id,
+            User.id == Comment.user_id,
+            Movie.id == movie_id
+        ).order_by(
+            Comment.add_time.desc()
+        ).paginate(page=page, per_page=8)
+        # 加不加all()都可以
+        ret['user'] = []
+        for obj in movie_comment_obj_list_page_data.items:
+            # print(obj.user.face)  # 202007162204485797a85fb89d4360a3e1fd63660105c8.jpg
+            # print(obj.content)  # 太好看了！
+            ret['user'].append({'username': obj.user.name, 'face': obj.user.face, 'movie_comment': obj.content,
+                                'add_time': str(obj.add_time)})
+            # ret['user']['face'].append(obj.user.face)
+            # ret['user']['movie_comment'].append(obj.content)
+
+    except Exception as e:
+        print(e)  # Entity '<class 'app.models.User'>' has no property 'movie_id'
+        ret['status'] = False
+        ret['msg'] = str(e)  # Entity '<class 'app.models.User'>' has no property 'movie_id'
+        ret['msg'] = '获取评论列表失败！'
+    """
+    import json
+    print(json.dumps(ret))  # {"status": true, "msg": null, "user": {"face": "202007162204485797a85fb89d4360a3e1fd63660105c8.jpg", "comment_content": "\u592a\u597d\u770b\u4e86\uff01"}}
+    print(jsonify(ret))  # <Response 151 bytes [200 OK]>
+    """
+    jsonify(ret)
+    print(
+        ret)  # {'status': True, 'msg': None, 'user': {'face': '202007162204485797a85fb89d4360a3e1fd63660105c8.jpg', 'comment_content': '太好看了！'}}
+    return jsonify(ret)
