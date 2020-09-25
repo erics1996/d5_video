@@ -52,3 +52,43 @@ def get_movie_list():
         ret['msg'] = '获取电影列表失败！'
         print(e)
     return jsonify(ret)
+
+
+# 添加电影收藏
+@home.route("/moviecol/add/", methods=["GET", 'POST'])
+def moviecol_add():
+    user_id = request.args.get("user_id", "")
+    movie_id = request.args.get("movie_id", "")
+    moviecol = models.Moviecol.query.filter_by(
+        user_id=user_id,
+        movie_id=movie_id
+    ).count()
+    data = dict()
+    if moviecol == 1:
+        data = dict(ok=1)  # {'ok': 1}表示已经收藏
+
+    if moviecol == 0:
+        moviecol = models.Moviecol(
+            user_id=user_id,
+            movie_id=movie_id
+        )
+        db.session.add(moviecol)
+        db.session.commit()
+        data = dict(ok=0)  # {'ok': 0}表示需要收藏
+    return jsonify(data)
+
+
+# 电影收藏状态
+@home.route('/api/moviecol/status/')
+def get_moviecol_status():
+    user_id = request.args.get("user_id", "")
+    movie_id = request.args.get("movie_id", "")
+    moviecol = models.Moviecol.query.filter_by(
+        user_id=user_id,
+        movie_id=movie_id
+    ).count()
+    if moviecol == 1:
+        data = dict(ok=1)  # {'ok': 1}表示已经收藏
+    else:
+        data = dict(ok=0)
+    return jsonify(data)

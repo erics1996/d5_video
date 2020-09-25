@@ -1,13 +1,13 @@
 {% macro page(data,url) %}
     {% if data %}
-        <ul class="pagination pagination-sm no-margin pull-right">
+        <ul class="pagination pagination-sm no-margin">
             <li><a href="{{ url_for(url,page=1) }}">首页</a></li>
             {% if data.has_prev %}
                 <li><a href="{{ url_for(url,page=data.prev_num) }}">上一页</a></li>
             {% else %}
                 <li class="disabled"><a href="#">上一页</a></li>
             {% endif %}
-            {% for page in data.iter_pages(2,2,3,2) %}<!--页码生成器-->
+            {% for page in data.iter_pages() %}<!--页码生成器-->
                 {% if page %}
                     <li class="{% if page==data.page %}active{% endif %}"><a
                             href="{{ url_for(url,page=page) }}">{{ page }}</a></li>

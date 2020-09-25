@@ -1,5 +1,5 @@
 {% extends "home/home.html" %}
-{% import "home/ui/home_page.html" as pg %}
+{% import "home/pagination/home_page.html" as pg %}
 {% block css %}
     <link rel="stylesheet" href="{{ url_for('static',filename='home/css/user.css') }}/">
     <style>
@@ -46,7 +46,7 @@
                     {% endfor %}
                 </table>
                 <div class="col-md-12 text-center" style="margin-top:6px;">
-                    {{ pg.page(page_data,'home.loginlog') }}
+                    {{ pg.page(page_data,'home.login_log') }}
                 </div>
             </div>
         </div>
@@ -58,7 +58,5 @@
         $(document).ready(function () {
             $("#m-4").addClass("active");
         });
-
-
     </script>
 {% endblock %}

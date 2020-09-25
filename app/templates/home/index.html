@@ -187,7 +187,7 @@
             <a href="{{ url_for('home.blueprint') }}" style="color:white;font-weight: bold">本站蓝图</a>&nbsp;&nbsp;
         </p>
         <p style="margin: 0">
-            <span style="color: white;font-weight: bold">Copyright © 2020-2022&nbsp; erics1996. All Rights Reserved.</span>
+            <span style="color: white;font-weight: bold">Copyright © 2020-2022&nbsp; d5video.pythoneers.cn. All Rights Reserved.</span>
         </p>
         <p style="margin: 0">
             <a target="_blank_" href="http://www.miit.gov.cn/"
@@ -215,6 +215,8 @@
     <script>
         $(function () {
             get_movie_list();
+            //获取电影收藏状态
+            get_moviecol_status();
         })
 
         function get_movie_list() {
@@ -225,7 +227,7 @@
                 //data: {},
                 success: function (args) {
                     $.each(args.movies, function (i, row) {
-                        var movies_items = "<div style=\"padding-left:2px;padding-right:2px\" class=\"col-sm-6 col-md-3\"><div class=\"thumbnail\">" + "<img class=\"lazy\" data-src=\"holder.js/100%x200\" alt=\"100%x200\"" + "data-original=\"" + "/static/admin/uploads/movielogos/" + row.logo + "\"" + "data-holder-rendered=\"true\"" + "style=\"height: 200px; width: 100%; display: block;\">" + "<div class=\"caption\">" + "<h5 style=\"font-weight: bold\">" + row.title + "</h5>" + "<p style=\"font-size: 13px\">" + "" + row.info + "" + "</p>" + "<p>" + "<a href=\"/play/" + row.id + ".html\" class=\"btn btn-primary\" role=\"button\">" + "<span class=\"glyphicon glyphicon-play\"></span>" + "<span>播放</span>" + "</a>" + "<a href=\"#\" class=\"btn btn-danger\" role=\"button\"" + "style=\"\">" + "<span class=\"glyphicon glyphicon-heart\"></span>&nbsp;" + "<span>收藏</span></a>" + "</p>" + "</div>" + "</div></div>"
+                        var movies_items = "<div style=\"padding-left:2px;padding-right:2px\" class=\"col-sm-6 col-md-3\"><div class=\"thumbnail\">" + "<img class=\"lazy\" data-src=\"holder.js/100%x200\" alt=\"100%x200\"" + "data-original=\"" + "/static/admin/uploads/movielogos/" + row.logo + "\"" + "data-holder-rendered=\"true\"" + "style=\"height: 200px; width: 100%; display: block;\">" + "<div class=\"caption\">" + "<h5 style=\"font-weight: bold\">" + row.title + "</h5>" + "<p style=\"font-size: 13px\">" + "" + row.info + "" + "</p>" + "<p>" + "<a href=\"/play/" + row.id + ".html\" class=\"btn btn-primary\" role=\"button\">" + "<span class=\"glyphicon glyphicon-play\"></span>" + "<span>播放</span>" + "</a>" + "<a onclick=\"moviecol_add();\" href=\"javascript:;\" class=\"btn btn-danger\" role=\"button\"" + "style=\"\">" + "<span class=\"glyphicon glyphicon-heart\"></span>&nbsp;" + "<span id='collect_font'>收藏</span></a>" + "</p>" + "</div>" + "</div></div>"
                         $('#container').append(movies_items);
                     });
                     $("img.lazy").lazyload({
@@ -236,5 +238,45 @@
                 }
             })
         }
+
+        function moviecol_add() {
+            $.ajax({
+                url: '/moviecol/add/',
+                type: 'GET',
+                datatype: 'json',
+                data: {
+                    'user_id':{{ session.get('user_id')}},
+                },
+                success: function (arg) {
+                    if (arg.ok) {
+                        alert('success');
+                    }
+                }
+            })
+        }
+
+        function get_moviecol_status() {
+            var user_id = {{ session.get('user_id') }};
+            var movie_id = 1;
+            $.ajax({
+                url: '/api/moviecol/status/',
+                dataType: 'json',
+                data: {
+                    'user_id': user_id,
+                    'movie_id': movie_id
+                },
+                type: 'GET',
+                success: function (arg) {
+                    if (arg.ok) {
+                        $('#collect_font').text('已收藏')
+                        //alert('已经收藏过了，不需要再次操作！！')
+                    } else {
+                        $('#collect_font').text('收藏')
+                        //alert('收藏成功')
+                    }
+                }
+            })
+        }
+
     </script>
 {% endblock %}

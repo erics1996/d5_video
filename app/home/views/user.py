@@ -152,22 +152,25 @@ def pwd():
 @home.route("/comment/", methods=["GET"])
 @user_login_decorator
 def comment_list():
+
     return render_template('home/comment.html')
 
 
 # 登陆日志
 @home.route("/loginlog/list/<int:page>/", methods=["GET"])
 @user_login_decorator
-def loginlog(page=None):
+def login_log(page=None):
     # UserLog.query.filter_by(user_id=session.get('user_id'))：sql语句
     # UserLog.query.filter_by(user_id=session.get('user_id')).first()：<UserLog 1>
     # filter_by和order_by部分先后顺序
+    if not page:
+        page = 1
     page_data = UserLog.query.order_by(
         UserLog.add_time.desc()
     ).filter_by(
         user_id=session.get('user_id')
     ).paginate(page=page, per_page=10)
-    return render_template('home/loginlog.html', page_data=page_data)
+    return render_template('home/login_log.html', page_data=page_data)
 
 
 @home.route('/comment/add/', methods=['POST'])
@@ -243,7 +246,6 @@ def show_movie_comment(page=None):
     return jsonify(ret)
 
 
-# 获取用户评论列表
 @home.route('/api/user/comment/list/')
 def get_user_comment(page=None):
     if not page:
@@ -267,13 +269,16 @@ WHERE comment.user_id = user.id AND comment.movie_id = movie.id AND comment.cont
     """
     comment_obj_list = Comment.query.join(
         Movie
+    ).join(
+        User
     ).filter(
-        Comment.movie_id == Movie.id
+        Comment.movie_id == Movie.id,
+        Comment.user_id == session['user_id']
     ).order_by(
         Comment.add_time.desc()
     ).all()  # all()之后就成对象了
     ret['user'] = []
     for obj in comment_obj_list:
         ret['user'].append({'movie_name': obj.movie.title, 'add_time': obj.add_time, 'content': obj.content})
-    print(ret)
+    # print(ret)
     return jsonify(ret)
