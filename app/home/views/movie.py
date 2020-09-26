@@ -1,13 +1,14 @@
 from app.home import home
 from flask import render_template, request, jsonify
 from ... import models
-from ...models import Comment,User,Movie
+from ...models import Comment, User, Movie
 from app import db
 from .user import user_login_decorator
 
 
-@home.route("/search/<int:page>/")
-def search(page=None):
+# 搜索电影
+@home.route("/movie/search/<int:page>/")
+def movie_search(page=None):
     if page is None:
         page = 1
     key = request.args.get("key", "")
@@ -19,18 +20,27 @@ def search(page=None):
     ).order_by(
         models.Movie.add_time.desc()
     ).paginate(page=page, per_page=10)
-    return render_template("home/search.html", page=page, key=key, page_data=page_data, movie_count=movie_count)
+    return render_template("home/movie_search.html", page=page, key=key, page_data=page_data, movie_count=movie_count)
 
 
+# 电影播放
 @home.route("/movie/play/<int:id>.html", methods=["GET", "POST"])
 def movie_play(id=None):
     movie = models.Movie.query.filter_by(id=id).first_or_404()
+
     movie.play_num += 1
     db.session.add(movie)
     db.session.commit()
     db.session.remove()
     movie = models.Movie.query.filter_by(id=id).first_or_404()
-    return render_template('home/movie_play.html', movie=movie)
+    comment_count = models.Comment.query.join(
+        models.Movie
+    ).filter(
+        models.Comment.movie_id == models.Movie.id,
+        models.Movie.id == id
+    ).count()
+    # print(comment_count)
+    return render_template('home/movie_play.html', movie=movie, comment_count=comment_count)
 
 
 # 接口：电影列表
@@ -65,7 +75,7 @@ def moviecol_add():
     ).count()
     data = dict()
     if moviecol == 1:
-        data = dict(ok=1)  # {'ok': 1}表示已经收藏
+        data = dict(ok=0)
 
     if moviecol == 0:
         moviecol = models.Moviecol(
@@ -74,11 +84,26 @@ def moviecol_add():
         )
         db.session.add(moviecol)
         db.session.commit()
-        data = dict(ok=0)  # {'ok': 0}表示需要收藏
+        data = dict(ok=1)
     return jsonify(data)
 
 
-# 电影收藏状态
+@home.route("/moviecol/del/", methods=["GET", 'POST'])
+def moviecol_cancel():
+    user_id = request.args.get("user_id", "")
+    movie_id = request.args.get("movie_id", "")
+    moviecol = models.Moviecol.query.filter_by(user_id=user_id, movie_id=movie_id).first_or_404()
+    # print(moviecol)
+    data = dict(ok=0)  # {'ok': 0}表示取消失败
+    if moviecol:
+        db.session.delete(moviecol)
+        db.session.commit()
+        db.session.remove()
+        data = dict(ok=1)  # {'ok': 1}表示取消成功
+    return jsonify(data)
+
+
+# 电影收藏状态(接口)
 @home.route('/api/moviecol/status/')
 def get_moviecol_status():
     user_id = request.args.get("user_id", "")

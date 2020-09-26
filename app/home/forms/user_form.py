@@ -69,7 +69,7 @@ class RegisterForm(FlaskForm):
     submit = SubmitField(
         '注册',
         render_kw={
-            "class": "btn btn-log btn-primary btn-block"
+            "class": "btn btn-log btn-block"
         }
     )
 
@@ -119,7 +119,7 @@ class LoginForm(FlaskForm):
     submit = SubmitField(
         '登录',
         render_kw={
-            "class": "btn btn-log btn-primary btn-block"
+            "class": "btn btn-log  btn-block"
         }
     )
 

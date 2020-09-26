@@ -168,8 +168,8 @@
     function search_video() {
         $("#search").click(function () {
                 var key = $("#key_movie").val();
-                location.href = "{{url_for('home.search',page=1)}}?key=" + key;
-                //#window.open("{{url_for('home.search',page=1)}}?key=" + key);
+                location.href = "{{url_for('home.movie_search',page=1)}}?key=" + key;
+                //#window.open("{{url_for('home.movie_search',page=1)}}?key=" + key);
             }
         )
     }

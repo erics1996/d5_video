@@ -26,7 +26,7 @@
                                 <span class="glyphicon glyphicon-heart"></span><span id="collect_font"></span>
                             </div>
                         {% else %}
-                            <div onclick="alert('请先登录才可以收藏！')" class="input-group-addon btn"
+                            <div onclick="alert('请先登录才可以发送弹幕！')" class="input-group-addon btn"
                                  style="background: #0682f5;color: white;">
                                 <span class="glyphicon glyphicon-send"></span>发送弹幕
                             </div>
@@ -39,31 +39,34 @@
                 </div>
             </div>
         </div>
+
         <div class="col-md-3">
             <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title" style=""><span class="glyphicon glyphicon-facetime-video"></span>&nbsp;影片介绍
-                    </h3>
-                </div>
-                <div class="panel-body" style="height:453px;overflow:scroll;padding: 0">
-                    <table class="table">
+                {#                <div class="panel-heading">#}
+                {#                    <h3 class="panel-title" style="">#}
+                {#                        <span class="glyphicon glyphicon-facetime-video"></span>&nbsp;影片介绍#}
+                {#                    </h3>#}
+                {#                </div>#}
+                {#                <div class="panel-body" style="height:496px;overflow:scroll;padding: 0">#}
+                <div class="panel-body" style="height:496px;padding: 0">
+                    <table class="table" style="margin-bottom: 5px">
                         <tr>
                             <td style="color:#ccc;font-weight:bold;">
                                 <span class="glyphicon glyphicon-film"></span>&nbsp;片名
                             </td>
                             <td style="font-size: 13px">{{ movie.title }}</td>
                         </tr>
-                        <!--
-                            <tr>
-                                <td style="color:#ccc;font-weight:bold;">
-                                    <span class="glyphicon glyphicon-tag"></span>&nbsp;标签
-                                </td>
-                                <td style="font-size: 13px"></td>
-                            </tr>
-                        -->
+
                         <tr>
                             <td style="color:#ccc;font-weight:bold;">
                                 <span class="glyphicon glyphicon-tag"></span>&nbsp;分类
+                            </td>
+                            <td style="font-size: 13px">电影</td>
+                        </tr>
+
+                        <tr>
+                            <td style="color:#ccc;font-weight:bold;">
+                                <span class="glyphicon glyphicon-tag"></span>&nbsp;标签
                             </td>
                             <td style="font-size: 13px">{{ movie.tag.name }}</td>
                         </tr>
@@ -108,22 +111,27 @@
                         </tr>
                         <tr>
                             <td style="color:#ccc;font-weight:bold;">
-                                <span class="glyphicon glyphicon-comment"></span>&nbsp;评论数量
+                                <span class="glyphicon glyphicon-comment"></span>&nbsp;评论量
                             </td>
-                            <td style="font-size: 13px">{{ movie.comment_num }}</td>
+                            <td style="font-size: 13px">{{ comment_count }}</td>
                         </tr>
                         <tr>
                             <td style="color:#ccc;font-weight:bold;">
                                 <span class="glyphicon glyphicon-picture"></span>&nbsp;影片介绍
                             </td>
                             <td style="font-size: 13px">
-                                {{ movie.info }}
+                                {#                                {{ movie.info }}#}
                             </td>
                         </tr>
                     </table>
+                    <div style="padding: 5px 18px;line-height: 1.8">
+                        {{ movie.info }}
+                    </div>
+
                 </div>
             </div>
         </div>
+
         <div class="col-md-12" style="margin-top:6px;">
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -136,7 +144,7 @@
                                 <span aria-hidden="true">×</span>
                                 <span class="sr-only">Close</span>
                             </button>
-                            <strong>请先<a href="{{ url_for('home.login') }}" target=""
+                            <strong>请先<a href="{{ url_for('home.login') }}" target="_blank"
                                          class="text-info">登录</a>，才可参与评论！</strong>
                         </div>
                     {% endif %}
@@ -163,7 +171,7 @@
                         </form>
                     {% endif %}
                     <ol class="breadcrumb" style="margin-top:6px;">
-                        <li>全部评论({{ movie.comment_num }})</li>
+                        <li>全部评论({{ comment_count }})</li>
                     </ol>
                     <ul class="commentList" id="commentList">
                         <!--
@@ -223,6 +231,7 @@
 {% block js %}
     <script type="text/javascript" src="{{ url_for('static',filename='home/ckplayer/js/ckplayer.js') }}"></script>
     <script type="text/javascript">
+        $('#nav-movie').css({'color': '#a52a2a'})
         var videoObject = {
             container: '.videosamplex',//“#”代表容器的ID，“.”或“”代表容器的class
             variable: 'player',//该属性必需设置，值等于下面的new chplayer()的对象
@@ -253,11 +262,17 @@
         var DArr = [];//弹幕数组
         var YArr = [];//元件数组
         function newDanmu() {
-            var txt = $("#bulletChat").val();
+            let txt = $("#bulletChat").val().trim().replace(/\s/g, "");
+            //alert(txt)
+            if (txt.length === 0) {
+                alert('弹幕内容不能为空！');
+                return
+            }
+
             //弹幕说明
             y += 20;
             if (y > 300) y = 0;
-            var danmuObj = {
+            let danmuObj = {
                 list: [{
                     type: 'image', //定义元素类型：只有二种类型，image=使用图片，text=文本
                     {% if session.get('face') %}
@@ -355,10 +370,14 @@
     </script>
     <script>
         $(function () {
-            commit_comment();
             show_comments();
-            moviecol_add();
-            get_moviecol_status();
+            commit_comment();
+            let status = get_moviecol_status();
+            if (status) {
+                moviecol_cancel();
+            } else {
+                moviecol_add();
+            }
         })
 
         function commit_comment() {
@@ -427,6 +446,7 @@
                 var user_id = {{ session.get('user_id') }};
                 var movie_id = {{ movie.id }};
                 $.ajax({
+                    async: false,
                     url: '{{ url_for('home.moviecol_add') }}',
                     dataType: 'json',
                     //data: "user_id=" + user_id + "&movie_id=" + movie_id,
@@ -437,11 +457,32 @@
                     type: 'GET',
                     success: function (arg) {
                         if (arg.ok) {
-                            $('#collect_font').text('已收藏')
-                            alert('已经收藏过了，不需要再次操作！！')
-                        } else {
-                            $('#collect_font').text('收藏')
-                            alert('收藏成功')
+                            $('#collect_font').text('已收藏');
+                            location.reload()
+                        }
+                    }
+                })
+            })
+        }
+
+        function moviecol_cancel() {
+            $("#btn-col").click(function () {
+                var user_id = {{ session.get('user_id') }};
+                var movie_id = {{ movie.id }};
+                $.ajax({
+                    async: false,
+                    url: '{{ url_for('home.moviecol_cancel') }}',
+                    dataType: 'json',
+                    //data: "user_id=" + user_id + "&movie_id=" + movie_id,
+                    data: {
+                        'user_id': user_id,
+                        'movie_id': movie_id
+                    },
+                    type: 'GET',
+                    success: function (arg) {
+                        if (arg.ok) {
+                            $('#collect_font').text('收藏');
+                            location.reload()
                         }
                     }
                 })
@@ -449,9 +490,11 @@
         }
 
         function get_moviecol_status() {
-            var user_id = {{ session.get('user_id') }};
-            var movie_id = {{ movie.id }};
+            let user_id = {{ session.get('user_id') }};
+            let movie_id = {{ movie.id }};
+            let status = true;
             $.ajax({
+                async: false,
                 url: '/api/moviecol/status/',
                 dataType: 'json',
                 data: {
@@ -462,13 +505,13 @@
                 success: function (arg) {
                     if (arg.ok) {
                         $('#collect_font').text('已收藏')
-                        //alert('已经收藏过了，不需要再次操作！！')
                     } else {
                         $('#collect_font').text('收藏')
-                        //alert('收藏成功')
+                        status=false
                     }
                 }
             })
+            return status;
         }
     </script>
 {% endblock %}
