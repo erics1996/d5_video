@@ -1,0 +1,75 @@
+{% extends "home/home.html" %}
+{% import "home/pagination/search_page.html" as pg %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <ol class="breadcrumb" style="margin-top:6px;margin-bottom: 0">
+                <li>找到了{{ movie_count }}个与"{{ key }}"有关的视频！</li>
+            </ol>
+        </div>
+        <div class="col-md-12" style="margin-top: 15px">
+            {% for v in page_data.items %}
+                <div class="media">
+                    <div class="media-left" style="padding: 2px">
+                        <a href="">
+                            <img class="img-rounded" height="110px" width="85px"
+                                 src="{{ url_for('static',filename='admin/uploads/movielogos/'+v.logo) }}"
+                                 alt="{{ v.title }}">
+                        </a>
+                    </div>
+                    <div class="media-body" style="padding: 2px">
+                        <div class="media-heading" style="font-size: 15px;margin: 5px;">{{ v.title }}
+                            <a href="{{ url_for('home.movie_play',id=v.id) }}" class="label label-danger pull-right">
+                                <span class="glyphicon glyphicon-play"></span>播放影片
+                            </a>
+                        </div>
+                        <div style="margin: 5px">{{ v.info }}</div>
+                    </div>
+                </div>
+            {% endfor %}
+            <hr>
+            <div class="col-md-12 text-center">
+                {{ pg.page(page_data,'home.movie_search') }}
+            </div>
+            <!--
+              <div class="col-md-3" style="padding:5px 3px">
+                  <div class="panel panel-default">
+                      <div class="panel-heading" id="news"><span class="glyphicon glyphicon-fire"></span>热门搜索</div>
+                      <div>
+                          <li style="padding: 11px 15px" href="#" class="list-group-item"><span
+                                  class="badge" style="background-color: #3379b7;">1200</span><a
+                                  href=""
+                                  style="color: #333333">我的天才女友第二季</a>
+                          </li>
+                          <li style="padding: 11px 15px" href="#" class="list-group-item"><span
+                                  class="badge" style="background-color: #3379b7;">1100</span><a
+                                  href=""
+                                  style="color: #333333">我的天才女友第一季</a>
+                          </li>
+                          <li style="padding: 11px 15px" href="#" class="list-group-item"><span class="badge"
+                                                                                                style="background-color: #3379b7;">890</span><a
+                                  href=""
+                                  style="color: #333333">我的天才女友第二季</a>
+                          </li>
+                          <li style="padding: 11px 15px" href="#" class="list-group-item"><span class="badge"
+                                                                                                style="background-color: #3379b7;">798</span><a
+                                  href=""
+                                  style="color: #333333">我的天才女友第二季</a>
+                          </li>
+                          <li style="padding: 11px 15px" href="#" class="list-group-item"><span class="badge"
+                                                                                                style="background-color: #3379b7;">509</span><a
+                                  href=""
+                                  style="color: #333333">我的天才女友第二季</a>
+                          </li>
+                      </div>
+                  </div>
+              </div>
+              -->
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script>
+        $('#nav-movie').css({'color': '#a52a2a'})
+    </script>
+{% endblock %}

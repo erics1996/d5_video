@@ -212,11 +212,18 @@ WHERE comment.user_id = user.id AND comment.movie_id = movie.id AND comment.cont
 
 # 用户收藏的视频列表
 @home.route("/moviecol/list/<int:page>/")
+@user_login_decorator
 def moviecol_list(page=None):
-    page_data = models.Moviecol.query.order_by(
+    page_data = models.Moviecol.query.join(
+        models.User
+    ).filter(
+        models.Moviecol.user_id == models.User.id,
+        # models.User.id == session.get('user_id'),
+        models.Moviecol.user_id == session.get('user_id')
+    ).order_by(
         models.Moviecol.addtime.desc()
     ).paginate(page=page, per_page=10)
-    print(page_data)
+    print(page_data.items)
     return render_template('home/moviecol.html', page_data=page_data)
 
 # 取消电影收藏

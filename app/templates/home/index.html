@@ -156,7 +156,7 @@
         <div id="container">
             {% for v in page_date.items %}
                 <div style="padding-left:2px;padding-right:2px" class="col-sm-6 col-md-3">
-                    <div class="thumbnail">
+                    <div class="thumbnail" id="{{ v.id }}">
                         <img class="lazy" data-src="holder.js/100%x200" alt="100%x200"
                              data-original="/static/admin/uploads/movielogos/{{ v.logo }}" data-holder-rendered="true"
                              style="height: 200px; width: 100%; display: block;">
@@ -170,11 +170,26 @@
                                     <span class="glyphicon glyphicon-play"></span>
                                     <span>播放</span>
                                 </a>
-                                <a onclick="moviecol_add();" href="javascript:;" class="btn btn-danger" role="button"
-                                   style="">
-                                    <span class="glyphicon glyphicon-heart"></span>&nbsp;
-                                    <span id='collect_font'>收藏</span>
-                                </a>
+                                {% if session.get('user') %}
+                                    <a onclick="alert('这里暂时不能收藏或取消收藏，请到播放页面或用户中心！')" href="javascript:"
+                                       class="btn btn-danger" role="button"
+                                       style="">
+                                        <span class="glyphicon glyphicon-heart"></span>
+                                        {#                                    {{ v.movie_cols }}#}
+                                        {% if v.movie_cols %}
+                                            <span id='collect_font'>已收藏</span>
+                                        {% else %}
+                                            <span id='collect_font'>收藏</span>
+                                        {% endif %}
+                                    </a>
+                                {% else %}
+                                    <a onclick="alert('请先登录！')" href="javascript:"
+                                       class="btn btn-danger" role="button"
+                                       style="">
+                                        <span class="glyphicon glyphicon-heart"></span>
+                                        <span id='collect_font'>收藏</span>
+                                    </a>
+                                {% endif %}
                             </p>
                         </div>
                     </div>
@@ -253,9 +268,9 @@
     </script>
     <script>
         $(function () {
-            get_movie_list();
             //获取电影收藏状态
-            get_moviecol_status();
+            //get_moviecol_status();
+            //get_movie_list();
         })
 
         function get_movie_list() {
@@ -279,6 +294,7 @@
         }
 
         function moviecol_add() {
+            //var movie_id = parseInt($('.thumbnail').attr('id'));
             $.ajax({
                 url: '/moviecol/add/',
                 type: 'GET',
@@ -293,29 +309,5 @@
                 }
             })
         }
-
-        function get_moviecol_status() {
-            var user_id = {{ session.get('user_id') }};
-            var movie_id = 1;
-            $.ajax({
-                url: '/api/moviecol/status/',
-                dataType: 'json',
-                data: {
-                    'user_id': user_id,
-                    'movie_id': movie_id
-                },
-                type: 'GET',
-                success: function (arg) {
-                    if (arg.ok) {
-                        $('#collect_font').text('已收藏')
-                        //alert('已经收藏过了，不需要再次操作！！')
-                    } else {
-                        $('#collect_font').text('收藏')
-                        //alert('收藏成功')
-                    }
-                }
-            })
-        }
-
     </script>
 {% endblock %}
