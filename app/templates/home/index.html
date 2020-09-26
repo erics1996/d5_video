@@ -1,4 +1,5 @@
 {% extends "home/home.html" %}
+{% import 'home/pagination/home_page.html' as pg %}
 {% block css %}
 {% endblock %}
 {% block content %}
@@ -113,11 +114,11 @@
                     <tr>
                         <td>发布时间</td>
                         <td>
-                            <a href="" class="label label-default"><span
+                            <a href="{{ url_for('home.movie_list',page=1) }}" class="label label-default"><span
                                     class="glyphicon glyphicon-time"></span>&nbsp;最近</span>
                             </a>
                             &nbsp;
-                            <a href="" class="label label-default"><span
+                            <a href="{{ url_for('home.movie_list',page=1,id=1) }}" class="label label-default"><span
                                     class="glyphicon glyphicon-time"></span>&nbsp;更早</span>
                             </a>
                         </td>
@@ -152,26 +153,56 @@
         </div>
     </div>
     <div class="row">
-        <div id="container"></div>
-        <nav aria-label="Page navigation" class="text-center">
-            <ul class="pagination" style="margin: 0">
-                <li>
-                    <a href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li class="active"><a href="#">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li>
-                    <a href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+        <div id="container">
+            {% for v in page_date.items %}
+                <div style="padding-left:2px;padding-right:2px" class="col-sm-6 col-md-3">
+                    <div class="thumbnail">
+                        <img class="lazy" data-src="holder.js/100%x200" alt="100%x200"
+                             data-original="/static/admin/uploads/movielogos/{{ v.logo }}" data-holder-rendered="true"
+                             style="height: 200px; width: 100%; display: block;">
+                        <div class="caption">
+                            <h5 style="font-weight: bold">{{ v.title }}</h5>
+                            <p style="font-size: 13px">{{ v.info }}</p>
+                            <p>
+                                <a target="_blank" href="{{ url_for('home.movie_play',id=v.id) }}"
+                                   class="btn btn-primary"
+                                   role="button">
+                                    <span class="glyphicon glyphicon-play"></span>
+                                    <span>播放</span>
+                                </a>
+                                <a onclick="moviecol_add();" href="javascript:;" class="btn btn-danger" role="button"
+                                   style="">
+                                    <span class="glyphicon glyphicon-heart"></span>&nbsp;
+                                    <span id='collect_font'>收藏</span>
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="col-md-12 text-center" style="margin-top:6px;">
+            {{ pg.page(page_date,'home.movie_list') }}
+        </div>
+        {#        <nav aria-label="Page navigation" class="text-center">#}
+        {#            <ul class="pagination" style="margin: 0">#}
+        {#                <li>#}
+        {#                    <a href="#" aria-label="Previous">#}
+        {#                        <span aria-hidden="true">&laquo;</span>#}
+        {#                    </a>#}
+        {#                </li>#}
+        {#                <li class="active"><a href="#">1</a></li>#}
+        {#                <li><a href="#">2</a></li>#}
+        {#                <li><a href="#">3</a></li>#}
+        {#                <li><a href="#">4</a></li>#}
+        {#                <li><a href="#">5</a></li>#}
+        {#                <li>#}
+        {#                    <a href="#" aria-label="Next">#}
+        {#                        <span aria-hidden="true">&raquo;</span>#}
+        {#                    </a>#}
+        {#                </li>#}
+        {#            </ul>#}
+        {#        </nav>#}
     </div>
     <!--电影列表-->
 {% endblock %}
@@ -212,6 +243,14 @@
 {% endblock %}
 {% block js %}
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery_lazyload/1.9.7/jquery.lazyload.js"></script>
+    <script>
+        $('#nav-movie').css({'color': '#a52a2a'})
+        $("img.lazy").lazyload({
+            //threshold : 200 //想提前加载图片, 可以设置threshold 选项, 设置 threshold 为 200 令图片在距离屏幕 200 像素时提前加载.
+            //event : "click"//你可以使用jquery事件，例如click和mouseover。也可以使用自定义事件，如sporty、foobar默认情况下是要等到用户向下滚动并且图像出现在视口中时。只有当用户点击它们才加载图片：
+            effect: "fadeIn" //淡入效果
+        });
+    </script>
     <script>
         $(function () {
             get_movie_list();

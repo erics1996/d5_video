@@ -5,20 +5,20 @@
             {% if data.has_prev %}
                 <li><a href="{{ url_for(url,page=data.prev_num) }}">上一页</a></li>
             {% else %}
-                <li class="disabled"><a href="#">上一页</a></li>
+                <li class="disabled"><a href="javascript:">上一页</a></li>
             {% endif %}
             {% for page in data.iter_pages() %}<!--页码生成器-->
                 {% if page %}
                     <li class="{% if page==data.page %}active{% endif %}"><a
                             href="{{ url_for(url,page=page) }}">{{ page }}</a></li>
                 {% else %}
-                    <li class="disabled"><a href="#">&hellip;</a></li>
+                    <li class="disabled"><a href="javascript:">&hellip;</a></li>
                 {% endif %}
             {% endfor %}
             {% if data.has_next %}
                 <li><a href="{{ url_for(url,page=data.next_num) }}">下一页</a></li>
             {% else %}
-                <li class="disabled"><a href="#">下一页</a></li>
+                <li class="disabled"><a href="javascript:">下一页</a></li>
             {% endif %}
 
             <li><a href="{{ url_for(url,page=data.pages) }}">尾页</a></li>
