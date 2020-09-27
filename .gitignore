@@ -1,4 +1,5 @@
 # Byte-compiled / optimized / DLL files
+db
 app/static/admin/uploads/movielogos/
 app/static/admin/uploads/movies
 .idea/
